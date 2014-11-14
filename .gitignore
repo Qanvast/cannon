@@ -1,0 +1,47 @@
+#built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Eclipse project files
+.classpath
+.project
+
+# Android Studio
+.idea
+#.idea/workspace.xml - uncomment this and comment/delete .idea if it better suit your needs
+.gradle
+/*/build
+build
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
+
+# APK signing files
+.signing/
+
+# Crashlytics
+com_crashlytics_export_strings.xml
