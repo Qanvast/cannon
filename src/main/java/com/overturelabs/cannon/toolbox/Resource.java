@@ -11,8 +11,14 @@ import java.util.regex.Pattern;
  * Created by stevetan on 12/11/14.
  */
 public abstract class Resource<T> {
-
     private final static String SKELETON_PATH_REGEX = "(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*}})|[\\w]+))+";
+    private final static String PLACEHOLDER_KEY_REGEX = "[\\d\\w]+";
+    private final static String PLACEHOLDER_VALUE_REGEX = "[\\d\\w]+";
+
+    private final static Pattern SKELETON_PATH_PATTERN = Pattern.compile(SKELETON_PATH_REGEX);
+    private final static Pattern PLACEHOLDER_KEY_PATTERN = Pattern.compile(PLACEHOLDER_KEY_REGEX);
+    private final static Pattern PLACEHOLDER_VALUE_PATTERN = Pattern.compile(PLACEHOLDER_VALUE_REGEX);
+
     private String mBaseUrl;
     private Map<String, String> mParams;
 
@@ -30,16 +36,31 @@ public abstract class Resource<T> {
      * @return Returns a URN (Uniform Resource Name) reference path that is relative to the API base URL.
      */
     public String getResourcePath() {
-        // TODO: Parse skeleton path and replace placeholders with values from parameters map.
         String resourcePath = getSkeletonResourcePath();
 
         // Validate skeleton resource path.
-        if (Pattern.matches(SKELETON_PATH_REGEX, resourcePath)) {
+        if (SKELETON_PATH_PATTERN.matcher(resourcePath).matches()) {
             for (Map.Entry<String, String> entry : mParams.entrySet()) {
+                // Check if key is valid
+                String key = entry.getKey();
+                String value = entry.getValue();
 
+                if (key != null && key.length() > 0) {
+                    key = key.trim();
+                }
+
+                if (value != null && value.length() > 0) {
+                    value = value.trim();
+                }
+
+                if (PLACEHOLDER_KEY_PATTERN.matcher(key).matches()
+                        && PLACEHOLDER_VALUE_PATTERN.matcher(value).matches()) {
+                    String placeholderRegexp = "\\{\\{\\s*" + entry.getKey() + "\\s*}}";
+
+                    resourcePath.replaceAll(placeholderRegexp, value);
+                }
             }
         }
-
 
         return resourcePath;
     }
