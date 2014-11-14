@@ -3,7 +3,6 @@ package com.overturelabs;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Build;
 
 import com.android.volley.Request;
@@ -35,7 +34,6 @@ public class Cannon {
 
     private static final Object SAFETY_SWITCH = new Object();
 
-    private static String mAppVersion = "0.0.1"; // Default version string
     private static String mUserAgent = "Cannon/0.0.1 (Android)"; // Default user agent string
 
     private static Cannon sInstance;
@@ -53,13 +51,12 @@ public class Cannon {
             context = context.getApplicationContext();
 
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            Resources res = context.getResources();
 
             // Set globals
-            mAppVersion = pInfo.versionName;
+            String appVersion = pInfo.versionName;
 
             // Build and set the custom user agent string
-            mUserAgent = appName + '/' + mAppVersion + " (" + Build.MANUFACTURER + " " + Build.MODEL + " " + Build.DEVICE + "; " + Build.VERSION.RELEASE + "; )";
+            mUserAgent = appName + '/' + appVersion + " (" + Build.MANUFACTURER + " " + Build.MODEL + " " + Build.DEVICE + "; " + Build.VERSION.RELEASE + "; )";
 
             // Based on com.android.volley.toolbox.Volley.java newRequestQueue method.
             File cacheDir = new File(context.getApplicationContext().getCacheDir(), DISK_CACHE_NAME);
@@ -153,10 +150,14 @@ public class Cannon {
         }
 
         Request<T> request =
-                new GsonRequest<T>(method, url,
+                new GsonRequest<T>(
+                        method,
                         resource.getResourceClass(),
+                        url,
                         method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
-                        successListener, genericErrorListener);
+                        resource.getOAuth2Token(),
+                        successListener, genericErrorListener
+                );
 
         // We can't fire volley if it's not been loaded.
         // Don't lock on static methods, we'll be locking the entire class.

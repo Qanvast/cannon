@@ -9,6 +9,7 @@ import java.util.Map;
 
 public abstract class FireRequest<T> extends Request<T> {
     private Map<String, String> mParams;
+    private String mOAuth2Token = null;
 
     public FireRequest(int method, String url, GenericErrorListener genericErrorListener) {
         super(method, url, genericErrorListener);
@@ -21,6 +22,21 @@ public abstract class FireRequest<T> extends Request<T> {
         this.mParams = params;
     }
 
+    public FireRequest(int method, String url, String oAuth2Token,
+                       GenericErrorListener genericErrorListener) {
+        super(method, url, genericErrorListener);
+
+        this.mOAuth2Token = oAuth2Token;
+    }
+
+    public FireRequest(int method, String url, Map<String, String> params,
+                       String oAuth2Token, GenericErrorListener genericErrorListener) {
+        super(method, url, genericErrorListener);
+
+        this.mParams = params;
+        this.mOAuth2Token = oAuth2Token;
+    }
+
     @Override
     protected Map<String, String> getParams() {
         return mParams;
@@ -31,12 +47,9 @@ public abstract class FireRequest<T> extends Request<T> {
 
         HashMap<String, String> header = new HashMap<String, String>();
 
-        // TODO: Need to inject user token somehow
-//        String userToken = UserUtil.getUserToken();
-//
-//        if (userToken != null) {
-//            header.put("Authorization", "Bearer " + UserUtil.getUserToken());
-//        }
+        if (mOAuth2Token != null && mOAuth2Token.length() > 0) {
+            header.put("Authorization", "Bearer " + mOAuth2Token);
+        }
 
         // Set User Agent header to a special user agent string.
         header.put("User-Agent", Cannon.getUserAgent());

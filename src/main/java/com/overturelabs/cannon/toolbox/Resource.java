@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * Created by stevetan on 12/11/14.
  */
 public abstract class Resource<T> {
-    private final static String SKELETON_PATH_REGEX = "(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*}})|[\\w]+))+";
+    private final static String SKELETON_PATH_REGEX = "^(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*\\}{2})|[\\w]+))+$";
     private final static String PLACEHOLDER_KEY_REGEX = "[\\d\\w]+";
     private final static String PLACEHOLDER_VALUE_REGEX = "[\\d\\w]+";
 
@@ -20,11 +20,44 @@ public abstract class Resource<T> {
     private final static Pattern PLACEHOLDER_VALUE_PATTERN = Pattern.compile(PLACEHOLDER_VALUE_REGEX);
 
     private String mBaseUrl;
-    private Map<String, String> mParams;
+    private Map<String, String> mParams = null;
+    private String mOAuth2Token = null;
 
-    public Resource(Map<String, String> params, String baseUrl) {
+    /**
+     * @param baseUrl       API base URL.
+     * @param params        Resource path parameters.
+     * @param oAuth2Token   OAuth 2.0 Bearer token to be injected into request header.
+     */
+    public Resource(String baseUrl, Map<String, String> params, String oAuth2Token) {
         mBaseUrl = baseUrl;
         mParams = params;
+        mOAuth2Token = oAuth2Token;
+    }
+
+
+    /**
+     * @param baseUrl       API base URL.
+     * @param oAuth2Token   OAuth 2.0 Bearer token to be injected into request header.
+     */
+    public Resource(String baseUrl, String oAuth2Token) {
+        mBaseUrl = baseUrl;
+        mOAuth2Token = oAuth2Token;
+    }
+
+    /**
+     * @param baseUrl       API base URL.
+     * @param params        Resource path parameters.
+     */
+    public Resource(String baseUrl, Map<String, String> params) {
+        mBaseUrl = baseUrl;
+        mParams = params;
+    }
+
+    /**
+     * @param baseUrl       API base URL.
+     */
+    public Resource(String baseUrl) {
+        mBaseUrl = baseUrl;
     }
 
     public abstract Class<T> getResourceClass();
@@ -39,7 +72,7 @@ public abstract class Resource<T> {
         String resourcePath = getSkeletonResourcePath();
 
         // Validate skeleton resource path.
-        if (SKELETON_PATH_PATTERN.matcher(resourcePath).matches()) {
+        if (SKELETON_PATH_PATTERN.matcher(resourcePath).matches() && mParams != null && mParams.size() > 0) {
             for (Map.Entry<String, String> entry : mParams.entrySet()) {
                 // Check if key is valid
                 String key = entry.getKey();
@@ -91,6 +124,10 @@ public abstract class Resource<T> {
      */
     public String getUrl() {
         return mBaseUrl + getResourcePath();
+    }
+
+    public String getOAuth2Token() {
+        return mOAuth2Token;
     }
 
     /**
