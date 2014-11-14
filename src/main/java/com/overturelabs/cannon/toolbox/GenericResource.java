@@ -16,6 +16,13 @@ public class GenericResource<T> extends Resource<T> {
         mSkeletonPath = skeletonPath;
     }
 
+    public GenericResource(Class<T> classOfT, String baseUrl, String skeletonPath, Map<String, String> params) {
+        super(baseUrl, params);
+
+        mClassOfT = classOfT;
+        mSkeletonPath = skeletonPath;
+    }
+
     public GenericResource(Class<T> classOfT, String baseUrl, String skeletonPath, Map<String, String> params, String oAuth2Token) {
         super(baseUrl, params, oAuth2Token);
 
