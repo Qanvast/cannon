@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
  */
 public abstract class Resource<T> {
     private final static String SKELETON_PATH_REGEX = "^(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*\\}{2})|[\\w]+))+$";
-    private final static String PLACEHOLDER_KEY_REGEX = "[\\d\\w]+";
-    private final static String PLACEHOLDER_VALUE_REGEX = "[\\d\\w]+";
+    private final static String PLACEHOLDER_KEY_REGEX = "^[\\d\\w]+$";
+    private final static String PLACEHOLDER_VALUE_REGEX = "^[\\d\\w]+$";
 
     private final static Pattern SKELETON_PATH_PATTERN = Pattern.compile(SKELETON_PATH_REGEX);
     private final static Pattern PLACEHOLDER_KEY_PATTERN = Pattern.compile(PLACEHOLDER_KEY_REGEX);
