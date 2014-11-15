@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by stevetan on 10/11/14.
@@ -32,9 +33,9 @@ public class Cannon {
     private static final String DISK_CACHE_NAME = "AmmunitionBox";
     private static final String TAG = "Cannon";
 
-    private static final Object SAFETY_SWITCH = new Object();
+    private static final AtomicBoolean SAFETY_SWITCH = new AtomicBoolean(true); // If safety switch is set, you can't fire the cannon! Loading the cannon will disable the safety switch.
 
-    private static String mUserAgent = "Cannon/0.0.1 (Android)"; // Default user agent string
+    private static String sUserAgent = "Cannon/0.0.1 (Android)"; // Default user agent string
 
     private static Cannon sInstance;
 
@@ -56,7 +57,12 @@ public class Cannon {
             String appVersion = pInfo.versionName;
 
             // Build and set the custom user agent string
-            mUserAgent = appName + '/' + appVersion + " (" + Build.MANUFACTURER + " " + Build.MODEL + " " + Build.DEVICE + "; " + Build.VERSION.RELEASE + "; )";
+            // We lock on the safety switch when setting user agent because we this variable
+            // is available via a static method and we don't want other threads to read this
+            // in the middle of a write operation.
+            synchronized (SAFETY_SWITCH) {
+                sUserAgent = appName + '/' + appVersion + " (" + Build.MANUFACTURER + " " + Build.MODEL + " " + Build.DEVICE + "; " + Build.VERSION.RELEASE + "; )";
+            }
 
             // Based on com.android.volley.toolbox.Volley.java newRequestQueue method.
             File cacheDir = new File(context.getApplicationContext().getCacheDir(), DISK_CACHE_NAME);
@@ -94,14 +100,15 @@ public class Cannon {
      * @param appName Application name.
      */
     public static Cannon load(Context context, String appName) {
-        // Don't lock on static methods, we'll be locking the entire class.
-        synchronized(SAFETY_SWITCH) {
+        // We check if the safety switch is off, but just in case it's on, let's switch it off.
+        if (SAFETY_SWITCH.getAndSet(false)) {
+            // Not loaded!
             if (sInstance == null) {
                 sInstance = new Cannon(context, appName);
             }
-
-            return sInstance;
         }
+
+        return sInstance;
     }
 
     /**
@@ -123,49 +130,48 @@ public class Cannon {
      * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.Resource}.
      * @throws NotLoadedException   If the Cannon is not loaded, we can't fire it, can we?
      */
-    public static synchronized <T> void fire(int method, Resource<T> resource, Map<String, String> params,
+    public static <T> void fire(int method, Resource<T> resource, Map<String, String> params,
                                              Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws NotLoadedException {
-        String url = resource.getUrl();
+        if (SAFETY_SWITCH.get()) {
+            // Alas, my captain! The cannon is not loaded!
+            throw new NotLoadedException();
+        } else {
+            String url = resource.getUrl();
 
-        // Art thou a GET?
-        if (method == Request.Method.GET && params != null && params.size() > 0) {
-            // Thou art!
-            boolean isFirst = true;
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                if (isFirst) {
-                    isFirst = false;
-                    url += "?";
-                } else {
-                    url += "&";
-                }
+            // Art thou a GET?
+            if (method == Request.Method.GET && params != null && params.size() > 0) {
+                // Thou art!
+                boolean isFirst = true;
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+                    if (isFirst) {
+                        isFirst = false;
+                        url += "?";
+                    } else {
+                        url += "&";
+                    }
 
-                try {
-                    url += URLEncoder.encode(entry.getKey(), DEFAULT_PARAMS_ENCODING);
-                    url += "=";
-                    url += URLEncoder.encode(entry.getValue(), DEFAULT_PARAMS_ENCODING);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    try {
+                        url += URLEncoder.encode(entry.getKey(), DEFAULT_PARAMS_ENCODING);
+                        url += "=";
+                        url += URLEncoder.encode(entry.getValue(), DEFAULT_PARAMS_ENCODING);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
 
-        Request<T> request =
-                new GsonRequest<T>(
-                        method,
-                        resource.getResourceClass(),
-                        url,
-                        method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
-                        resource.getOAuth2Token(),
-                        successListener, genericErrorListener
-                );
+            Request<T> request =
+                    new GsonRequest<T>(
+                            method,
+                            resource.getResourceClass(),
+                            url,
+                            method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
+                            resource.getOAuth2Token(),
+                            successListener, genericErrorListener
+                    );
 
-        // We can't fire volley if it's not been loaded.
-        // Don't lock on static methods, we'll be locking the entire class.
-        synchronized(SAFETY_SWITCH) {
             if (sInstance != null && sInstance.mRequestQueue != null) {
                 sInstance.mRequestQueue.add(request);
-            } else {
-                throw new NotLoadedException();
             }
         }
     }
@@ -174,8 +180,8 @@ public class Cannon {
         // Don't lock on static methods, we'll be locking the entire class.
         // We lock on the safety switch to make sure the string we get is
         // not in the midst of a write cycle.
-        synchronized(SAFETY_SWITCH) {
-            return mUserAgent;
+        synchronized (SAFETY_SWITCH) {
+            return sUserAgent;
         }
     }
 
@@ -184,7 +190,7 @@ public class Cannon {
          * No need to lock on SAFETY_SWITCH here since we implicitly assumes
          * that Cannon is loaded before user can call this function.
          */
-        if (mImageLoader == null) {
+        if (SAFETY_SWITCH.get()) {
             // Well it looks like the cannon was not loaded. I'll be damned.
             throw new NotLoadedException();
         } else {
