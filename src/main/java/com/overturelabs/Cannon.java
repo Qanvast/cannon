@@ -16,7 +16,7 @@ import com.overturelabs.cannon.BitmapLruCache;
 import com.overturelabs.cannon.OkHttpStack;
 import com.overturelabs.cannon.toolbox.GenericErrorListener;
 import com.overturelabs.cannon.toolbox.GsonRequest;
-import com.overturelabs.cannon.toolbox.Resource;
+import com.overturelabs.cannon.toolbox.ResourcePoint;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -123,20 +123,20 @@ public class Cannon {
      * in the request body.
      *
      * @param method                Refer to {@link com.android.volley.Request.Method com.android.volley.Request.Method}.
-     * @param resource              {@link com.overturelabs.cannon.toolbox.Resource} object that cannon should be expecting.
+     * @param resourcePoint              {@link com.overturelabs.cannon.toolbox.ResourcePoint} object that cannon should be expecting.
      * @param params                Request body or query parameters, depending on method.
      * @param successListener       Success listener.
      * @param genericErrorListener  Error listener.
-     * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.Resource}.
+     * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @throws NotLoadedException   If the Cannon is not loaded, we can't fire it, can we?
      */
-    public static <T> void fire(int method, Resource<T> resource, Map<String, String> params,
+    public static <T> void fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params,
                                              Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws NotLoadedException {
         if (SAFETY_SWITCH.get()) {
             // Alas, my captain! The cannon is not loaded!
             throw new NotLoadedException();
         } else {
-            String url = resource.getUrl();
+            String url = resourcePoint.getUrl();
 
             // Art thou a GET?
             if (method == Request.Method.GET && params != null && params.size() > 0) {
@@ -163,10 +163,10 @@ public class Cannon {
             Request<T> request =
                     new GsonRequest<T>(
                             method,
-                            resource.getResourceClass(),
+                            resourcePoint.getResourceClass(),
                             url,
                             method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
-                            resource.getOAuth2Token(),
+                            resourcePoint.getOAuth2Token(),
                             successListener, genericErrorListener
                     );
 

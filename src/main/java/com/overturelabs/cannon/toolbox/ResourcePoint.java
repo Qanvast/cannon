@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  * Created by stevetan on 12/11/14.
  */
-public abstract class Resource<T> {
+public abstract class ResourcePoint<T> {
     private final static String SKELETON_PATH_REGEX = "^(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*\\}{2})|[\\w]+))+$";
     private final static String PLACEHOLDER_KEY_REGEX = "^[\\d\\w]+$";
     private final static String PLACEHOLDER_VALUE_REGEX = "^[\\d\\w]+$";
@@ -28,7 +28,7 @@ public abstract class Resource<T> {
      * @param params        Resource path parameters.
      * @param oAuth2Token   OAuth 2.0 Bearer token to be injected into request header.
      */
-    public Resource(String baseUrl, Map<String, String> params, String oAuth2Token) {
+    public ResourcePoint(String baseUrl, Map<String, String> params, String oAuth2Token) {
         mBaseUrl = baseUrl;
         mParams = params;
         mOAuth2Token = oAuth2Token;
@@ -39,7 +39,7 @@ public abstract class Resource<T> {
      * @param baseUrl       API base URL.
      * @param oAuth2Token   OAuth 2.0 Bearer token to be injected into request header.
      */
-    public Resource(String baseUrl, String oAuth2Token) {
+    public ResourcePoint(String baseUrl, String oAuth2Token) {
         mBaseUrl = baseUrl;
         mOAuth2Token = oAuth2Token;
     }
@@ -48,7 +48,7 @@ public abstract class Resource<T> {
      * @param baseUrl       API base URL.
      * @param params        Resource path parameters.
      */
-    public Resource(String baseUrl, Map<String, String> params) {
+    public ResourcePoint(String baseUrl, Map<String, String> params) {
         mBaseUrl = baseUrl;
         mParams = params;
     }
@@ -56,7 +56,7 @@ public abstract class Resource<T> {
     /**
      * @param baseUrl       API base URL.
      */
-    public Resource(String baseUrl) {
+    public ResourcePoint(String baseUrl) {
         mBaseUrl = baseUrl;
     }
 
@@ -107,12 +107,12 @@ public abstract class Resource<T> {
      *
      * <code>/user/{{ userId }}</code>
      *
-     * The default {@link Resource#getResourcePath()} method is expecting
+     * The default {@link ResourcePoint#getResourcePath()} method is expecting
      * placeholders in the following format:
      *
      * <code>{{ placeholderIdentifier }}</code>
      *
-     * {@link Resource#getResourcePath()} will replace the placeholders with
+     * {@link ResourcePoint#getResourcePath()} will replace the placeholders with
      * the provided parameters.
      *
      * @return Returns a skeleton resource path.
@@ -131,7 +131,7 @@ public abstract class Resource<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, Resource, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
      *
      * @param params                        Query parameters for this request.
      * @param successListener               Success listener.
@@ -143,7 +143,7 @@ public abstract class Resource<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, Resource, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
      *
      * @param params                        POST body for this request.
      * @param successListener               Success listener.
@@ -155,7 +155,7 @@ public abstract class Resource<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, Resource, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
      *
      * @param params                        PUT body for this request.
      * @param successListener               Success listener.
@@ -167,7 +167,7 @@ public abstract class Resource<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, Resource, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
      *
      * @param params                        DELETE body for this request.
      * @param successListener               Success listener.
@@ -179,7 +179,7 @@ public abstract class Resource<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, Resource, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
      *
      * @param params                        PATCH body for this request.
      * @param successListener               Success listener.
