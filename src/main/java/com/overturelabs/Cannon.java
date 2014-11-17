@@ -100,11 +100,18 @@ public class Cannon {
      * @param appName Application name.
      */
     public static Cannon load(Context context, String appName) {
-        // We check if the safety switch is off, but just in case it's on, let's switch it off.
-        if (SAFETY_SWITCH.getAndSet(false)) {
-            // Not loaded!
-            if (sInstance == null) {
-                sInstance = new Cannon(context, appName);
+        /**
+         * Let's lock on the safety switch first, so that only one thread can perform write operations
+         * at any one time. Then we check if the safety switch is on; If the safety switch is on, we will
+         * load cannon and then switch off the safety.
+         */
+        synchronized (SAFETY_SWITCH) {
+            if (SAFETY_SWITCH.get()) {
+                // Not loaded!
+                if (sInstance == null) {
+                    sInstance = new Cannon(context, appName);
+                    SAFETY_SWITCH.set(false);
+                }
             }
         }
 
