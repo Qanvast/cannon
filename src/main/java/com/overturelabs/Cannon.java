@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.util.Pair;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +16,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.overturelabs.cannon.BitmapLruCache;
 import com.overturelabs.cannon.OkHttpStack;
 import com.overturelabs.cannon.toolbox.GenericErrorListener;
+import com.overturelabs.cannon.toolbox.GsonMultipartRequest;
 import com.overturelabs.cannon.toolbox.GsonRequest;
 import com.overturelabs.cannon.toolbox.ResourcePoint;
 
@@ -173,6 +175,51 @@ public class Cannon {
                             resourcePoint.getResourceClass(),
                             url,
                             method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
+                            resourcePoint.getOAuth2Token(),
+                            successListener, genericErrorListener
+                    );
+
+            if (sInstance != null && sInstance.mRequestQueue != null) {
+                sInstance.mRequestQueue.add(request);
+            }
+        }
+    }
+
+    /**
+     * FIRE ALL ZE CANNONS! FIRE AT WILLZ!
+     *
+     * Ok serious stuff.
+     *
+     * For GET requests, we will treat the params provided
+     * as query parameters, and append them to the URL.
+     *
+     * For all other requests, we will send the params
+     * in the request body.
+     *
+     * @param method                Refer to {@link com.android.volley.Request.Method com.android.volley.Request.Method}.
+     * @param resourcePoint         {@link com.overturelabs.cannon.toolbox.ResourcePoint} object that cannon should be expecting.
+     * @param params                Request body or query parameters, depending on method.
+     * @param files                 Files to be included in the multipart/form request.
+     * @param successListener       Success listener.
+     * @param genericErrorListener  Error listener.
+     * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
+     * @throws NotLoadedException   If the Cannon is not loaded, we can't fire it, can we?
+     */
+    public static <T> void fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params, Map<String, Pair<File, String>> files,
+                                Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws NotLoadedException {
+        if (SAFETY_SWITCH.get()) {
+            // Alas, my captain! The cannon is not loaded!
+            throw new NotLoadedException();
+        } else {
+            String url = resourcePoint.getUrl();
+
+            Request<T> request =
+                    new GsonMultipartRequest<T>(
+                            method,
+                            resourcePoint.getResourceClass(),
+                            url,
+                            method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
+                            method != Request.Method.GET ? files: null,
                             resourcePoint.getOAuth2Token(),
                             successListener, genericErrorListener
                     );
