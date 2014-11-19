@@ -11,27 +11,27 @@ public abstract class FireRequest<T> extends Request<T> {
     private Map<String, String> mParams;
     private String mOAuth2Token = null;
 
-    public FireRequest(int method, String url, GenericErrorListener genericErrorListener) {
-        super(method, url, genericErrorListener);
+    public FireRequest(int method, String url, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
     }
 
     public FireRequest(int method, String url, Map<String, String> params,
-                          GenericErrorListener genericErrorListener) {
-        super(method, url, genericErrorListener);
+                          Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
 
         this.mParams = params;
     }
 
     public FireRequest(int method, String url, String oAuth2Token,
-                       GenericErrorListener genericErrorListener) {
-        super(method, url, genericErrorListener);
+                       Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
 
         this.mOAuth2Token = oAuth2Token;
     }
 
     public FireRequest(int method, String url, Map<String, String> params,
-                       String oAuth2Token, GenericErrorListener genericErrorListener) {
-        super(method, url, genericErrorListener);
+                       String oAuth2Token, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
 
         this.mParams = params;
         this.mOAuth2Token = oAuth2Token;

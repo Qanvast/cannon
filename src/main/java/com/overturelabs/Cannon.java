@@ -15,7 +15,6 @@ import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.overturelabs.cannon.BitmapLruCache;
 import com.overturelabs.cannon.OkHttpStack;
-import com.overturelabs.cannon.toolbox.GenericErrorListener;
 import com.overturelabs.cannon.toolbox.GsonMultipartRequest;
 import com.overturelabs.cannon.toolbox.GsonRequest;
 import com.overturelabs.cannon.toolbox.ResourcePoint;
@@ -135,12 +134,12 @@ public class Cannon {
      * @param resourcePoint              {@link com.overturelabs.cannon.toolbox.ResourcePoint} object that cannon should be expecting.
      * @param params                Request body or query parameters, depending on method.
      * @param successListener       Success listener.
-     * @param genericErrorListener  Error listener.
+     * @param errorListener  Error listener.
      * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @throws NotLoadedException   If the Cannon is not loaded, we can't fire it, can we?
      */
     public static <T> void fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params,
-                                             Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws NotLoadedException {
+                                             Response.Listener<T> successListener, Response.ErrorListener errorListener) throws NotLoadedException {
         if (SAFETY_SWITCH.get()) {
             // Alas, my captain! The cannon is not loaded!
             throw new NotLoadedException();
@@ -176,7 +175,7 @@ public class Cannon {
                             url,
                             method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
                             resourcePoint.getOAuth2Token(),
-                            successListener, genericErrorListener
+                            successListener, errorListener
                     );
 
             if (sInstance != null && sInstance.mRequestQueue != null) {
@@ -201,12 +200,12 @@ public class Cannon {
      * @param params                Request body or query parameters, depending on method.
      * @param files                 Files to be included in the multipart/form request.
      * @param successListener       Success listener.
-     * @param genericErrorListener  Error listener.
+     * @param errorListener  Error listener.
      * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @throws NotLoadedException   If the Cannon is not loaded, we can't fire it, can we?
      */
     public static <T> void fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params, Map<String, Pair<File, String>> files,
-                                Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws NotLoadedException {
+                                Response.Listener<T> successListener, Response.ErrorListener errorListener) throws NotLoadedException {
         if (SAFETY_SWITCH.get()) {
             // Alas, my captain! The cannon is not loaded!
             throw new NotLoadedException();
@@ -221,7 +220,7 @@ public class Cannon {
                             method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
                             method != Request.Method.GET ? files: null,
                             resourcePoint.getOAuth2Token(),
-                            successListener, genericErrorListener
+                            successListener, errorListener
                     );
 
             if (sInstance != null && sInstance.mRequestQueue != null) {

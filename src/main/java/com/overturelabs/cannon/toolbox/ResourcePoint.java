@@ -131,62 +131,62 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
      *
      * @param params                        Query parameters for this request.
      * @param successListener               Success listener.
-     * @param genericErrorListener          Error listener.
+     * @param errorListener          Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void get(Map<String, String> params, Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.GET, this, params, successListener, genericErrorListener);
+    public void get(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        Cannon.fire(Request.Method.GET, this, params, successListener, errorListener);
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
      *
      * @param params                        POST body for this request.
      * @param successListener               Success listener.
-     * @param genericErrorListener          Error listener.
+     * @param errorListener          Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void post(Map<String, String> params, Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.POST, this, params, successListener, genericErrorListener);
+    public void post(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        Cannon.fire(Request.Method.POST, this, params, successListener, errorListener);
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
      *
      * @param params                        PUT body for this request.
      * @param successListener               Success listener.
-     * @param genericErrorListener          Error listener.
+     * @param errorListener          Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void put(Map<String, String> params, Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.PUT, this, params, successListener, genericErrorListener);
+    public void put(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        Cannon.fire(Request.Method.PUT, this, params, successListener, errorListener);
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
      *
      * @param params                        DELETE body for this request.
      * @param successListener               Success listener.
-     * @param genericErrorListener          Error listener.
+     * @param errorListener          Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void delete(Map<String, String> params, Response.Listener<T> successListener, GenericErrorListener genericErrorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.DELETE, this, params, successListener, genericErrorListener);
+    public void delete(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        Cannon.fire(Request.Method.DELETE, this, params, successListener, errorListener);
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, GenericErrorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
      *
      * @param params                        PATCH body for this request.
      * @param successListener               Success listener.
-     * @param genericErrorListener          Error listener.
+     * @param errorListener          Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void patch(Map<String, String> params, Response.Listener successListener, GenericErrorListener genericErrorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.PATCH, this, params, successListener, genericErrorListener);
+    public void patch(Map<String, String> params, Response.Listener successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        Cannon.fire(Request.Method.PATCH, this, params, successListener, errorListener);
     }
 }

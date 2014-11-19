@@ -26,19 +26,19 @@ public class GsonRequest<T> extends FireRequest<T> {
      * @param url
      * @param classOfT
      * @param listener
-     * @param genericErrorListener
+     * @param errorListener
      */
     public GsonRequest(int method, Class<T> classOfT, String url, String oAuth2Token,
-                       Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, oAuth2Token, genericErrorListener);
+                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, oAuth2Token, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
     }
 
     public GsonRequest(int method, Class<T> classOfT, String url, Map<String, String> params, String oAuth2Token,
-                       Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, params, oAuth2Token, genericErrorListener);
+                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, params, oAuth2Token, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
@@ -46,24 +46,24 @@ public class GsonRequest<T> extends FireRequest<T> {
 
     public GsonRequest(int method, Class<T> classOfT, String url,
                        Map<String, String> params, String oAuth2Token, Map<String, String> headers,
-                       Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, params, oAuth2Token, genericErrorListener);
+                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, params, oAuth2Token, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = headers;
         this.mListener = listener;
     }
 
     public GsonRequest(int method, Class<T> classOfT, String url,
-                       Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, genericErrorListener);
+                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
     }
 
     public GsonRequest(int method, Class<T> classOfT, String url, Map<String, String> params,
-                       Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, params, genericErrorListener);
+                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, params, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
@@ -71,8 +71,8 @@ public class GsonRequest<T> extends FireRequest<T> {
 
     public GsonRequest(int method, Class<T> classOfT, String url,
                        Map<String, String> params, Map<String, String> headers,
-                       Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, params, genericErrorListener);
+                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, params, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = headers;
         this.mListener = listener;

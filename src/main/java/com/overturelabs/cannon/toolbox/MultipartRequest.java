@@ -4,6 +4,7 @@ import android.support.v4.util.Pair;
 import android.webkit.MimeTypeMap;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
@@ -24,31 +25,32 @@ import okio.Buffer;
  */
 public abstract class MultipartRequest<T> extends FireRequest<T> {
 
-    private final static String PART_HEADER_PRE = "\"Content-Disposition\", \"form-data; name=\"";
-    private final static String PART_HEADER_POST = "\"";
+    private final static String PART_HEADER_NAME = "Content-Disposition";
+    private final static String PART_HEADER_VALUE_PRE = "form-data; name=\"";
+    private final static String PART_HEADER_VALUE_POST = "\"";
 
     private RequestBody mRequestBody;
 
-    public MultipartRequest(int method, String url, Map<String, Pair<File, String>> files, GenericErrorListener genericErrorListener) {
-        super(method, url, genericErrorListener);
+    public MultipartRequest(int method, String url, Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
 
         build(null, files);
     }
 
-    public MultipartRequest(int method, String url, Map<String, String> params, Map<String, Pair<File, String>> files, GenericErrorListener genericErrorListener) {
-        super(method, url, genericErrorListener);
+    public MultipartRequest(int method, String url, Map<String, String> params, Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
 
         build(params, files);
     }
 
-    public MultipartRequest(int method, String url, Map<String, Pair<File, String>> files, String oAuth2Token, GenericErrorListener genericErrorListener) {
-        super(method, url, oAuth2Token, genericErrorListener);
+    public MultipartRequest(int method, String url, Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
+        super(method, url, oAuth2Token, errorListener);
 
         build(null, files);
     }
 
-    public MultipartRequest(int method, String url, Map<String, String> params, Map<String, Pair<File, String>> files, String oAuth2Token, GenericErrorListener genericErrorListener) {
-        super(method, url, oAuth2Token, genericErrorListener);
+    public MultipartRequest(int method, String url, Map<String, String> params, Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
+        super(method, url, oAuth2Token, errorListener);
 
         build(params, files);
     }

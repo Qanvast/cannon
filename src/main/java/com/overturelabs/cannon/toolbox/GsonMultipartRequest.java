@@ -24,8 +24,8 @@ public class GsonMultipartRequest<T> extends MultipartRequest<T> {
 
     public GsonMultipartRequest(int method, Class<T> classOfT, String url,
                                 Map<String, String> params, Map<String, Pair<File, String>> files,
-                                Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, params, files, genericErrorListener);
+                                Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, params, files, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
@@ -33,8 +33,8 @@ public class GsonMultipartRequest<T> extends MultipartRequest<T> {
 
     public GsonMultipartRequest(int method, Class<T> classOfT, String url,
                                 Map<String, Pair<File, String>> files,
-                                Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, files, genericErrorListener);
+                                Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, files, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
@@ -42,8 +42,8 @@ public class GsonMultipartRequest<T> extends MultipartRequest<T> {
 
     public GsonMultipartRequest(int method, Class<T> classOfT, String url,
                                 Map<String, String> params, Map<String, Pair<File, String>> files,
-                                String oAuth2Token, Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, params, files, oAuth2Token, genericErrorListener);
+                                String oAuth2Token, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, params, files, oAuth2Token, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
@@ -51,8 +51,8 @@ public class GsonMultipartRequest<T> extends MultipartRequest<T> {
 
     public GsonMultipartRequest(int method, Class<T> classOfT, String url,
                                 Map<String, Pair<File, String>> files,
-                                String oAuth2Token, Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, files, oAuth2Token, genericErrorListener);
+                                String oAuth2Token, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, files, oAuth2Token, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = null;
         this.mListener = listener;
@@ -60,8 +60,8 @@ public class GsonMultipartRequest<T> extends MultipartRequest<T> {
 
     public GsonMultipartRequest(int method, Class<T> classOfT, String url,
                                 Map<String, String> params, Map<String, Pair<File, String>> files,
-                                Map<String, String> headers, Response.Listener<T> listener, GenericErrorListener genericErrorListener) {
-        super(method, url, params, files, genericErrorListener);
+                                Map<String, String> headers, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(method, url, params, files, errorListener);
         this.mClassOfT = classOfT;
         this.mHeaders = headers;
         this.mListener = listener;
