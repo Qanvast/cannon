@@ -58,25 +58,26 @@ public abstract class MultipartRequest<T> extends FireRequest<T> {
     private void build(Map<String, String> params, Map<String, Pair<File, String>> files) {
         MultipartBuilder multipartBuilder = new MultipartBuilder().type(MultipartBuilder.FORM);
 
-        if (params != null) {
-            for (Map.Entry<String, String> stringPart : params.entrySet()) {
-                multipartBuilder.addPart(
-                        Headers.of(PART_HEADER_PRE + stringPart.getKey() + PART_HEADER_POST),
-                        RequestBody.create(null, stringPart.getValue())
-                );
-            }
-        }
-
         for (Map.Entry<String, Pair<File, String>> filePart : files.entrySet()) {
             Pair<File, String> filePair = filePart.getValue();
 
             File file = filePair.first;
             String mediaType = filePair.second;
 
-            multipartBuilder.addPart(
-                    Headers.of(PART_HEADER_PRE + filePart.getKey() + PART_HEADER_POST),
+            multipartBuilder.addFormDataPart(
+                    filePart.getKey(),
+                    file.getName(),
                     RequestBody.create(MediaType.parse(mediaType), file)
             );
+        }
+
+        if (params != null) {
+            for (Map.Entry<String, String> stringPart : params.entrySet()) {
+                multipartBuilder.addFormDataPart(
+                        stringPart.getKey(),
+                        stringPart.getValue()
+                );
+            }
         }
 
         mRequestBody = multipartBuilder.build();
