@@ -1,9 +1,12 @@
 package com.overturelabs.cannon.toolbox;
 
+import android.support.v4.util.Pair;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.overturelabs.Cannon;
 
+import java.io.File;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -131,11 +134,11 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, com.android.volley.Response.ErrorListener)} method.
      *
      * @param params                        Query parameters for this request.
      * @param successListener               Success listener.
-     * @param errorListener          Error listener.
+     * @param errorListener                 Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
     public void get(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
@@ -143,11 +146,11 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, com.android.volley.Response.ErrorListener)} method.
      *
      * @param params                        POST body for this request.
      * @param successListener               Success listener.
-     * @param errorListener          Error listener.
+     * @param errorListener                 Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
     public void post(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
@@ -155,11 +158,24 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, com.android.volley.Response.ErrorListener)} method.
+     *
+     * @param params                        POST body for this request.
+     * @param files                         Files to be included in this multipart/form-date request.
+     * @param successListener               Success listener.
+     * @param errorListener                 Error listener.
+     * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
+     */
+    public void post(Map<String, String> params, Map<String, Pair<File, String>> files, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        Cannon.fire(Request.Method.POST, this, params, files, successListener, errorListener);
+    }
+
+    /**
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, com.android.volley.Response.ErrorListener)} method.
      *
      * @param params                        PUT body for this request.
      * @param successListener               Success listener.
-     * @param errorListener          Error listener.
+     * @param errorListener                 Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
     public void put(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
@@ -167,11 +183,24 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, com.android.volley.Response.ErrorListener)} method.
+     *
+     * @param params                        PUT body for this request.
+     * @param files                         Files to be included in this multipart/form-date request.
+     * @param successListener               Success listener.
+     * @param errorListener                 Error listener.
+     * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
+     */
+    public void put(Map<String, String> params, Map<String, Pair<File, String>> files, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        Cannon.fire(Request.Method.PUT, this, params, files, successListener, errorListener);
+    }
+
+    /**
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, com.android.volley.Response.ErrorListener)} method.
      *
      * @param params                        DELETE body for this request.
      * @param successListener               Success listener.
-     * @param errorListener          Error listener.
+     * @param errorListener                 Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
     public void delete(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
@@ -179,11 +208,11 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, errorListener)} method.
+     * Wrapper around {@link com.overturelabs.Cannon#fire(int, ResourcePoint, java.util.Map, com.android.volley.Response.Listener, com.android.volley.Response.ErrorListener)} method.
      *
      * @param params                        PATCH body for this request.
      * @param successListener               Success listener.
-     * @param errorListener          Error listener.
+     * @param errorListener                 Error listener.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
     public void patch(Map<String, String> params, Response.Listener successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
