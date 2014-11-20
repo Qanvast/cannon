@@ -91,7 +91,7 @@ public abstract class ResourcePoint<T> {
 
                 if (PLACEHOLDER_KEY_PATTERN.matcher(key).matches()
                         && PLACEHOLDER_VALUE_PATTERN.matcher(value).matches()) {
-                    String placeholderRegexp = "\\{\\{\\s*" + entry.getKey() + "\\s*}}";
+                    String placeholderRegexp = "\\{\\{\\s*" + entry.getKey() + "\\s*\\}{2}";
 
                     resourcePath.replaceAll(placeholderRegexp, value);
                 }
