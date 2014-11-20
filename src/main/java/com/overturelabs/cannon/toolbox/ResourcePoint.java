@@ -17,6 +17,8 @@ public abstract class ResourcePoint<T> {
     private final static String SKELETON_PATH_REGEX = "^(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*\\}{2})|[\\w]+))+$";
     private final static String PLACEHOLDER_KEY_REGEX = "^[\\d\\w]+$";
     private final static String PLACEHOLDER_VALUE_REGEX = "^[\\d\\w]+$";
+    private final static String PLACEHOLDER_REGEX_PRE = "\\{\\{\\s*";
+    private final static String PLACEHOLDER_REGEX_POST = "\\s*\\}{2}";
 
     private final static Pattern SKELETON_PATH_PATTERN = Pattern.compile(SKELETON_PATH_REGEX);
     private final static Pattern PLACEHOLDER_KEY_PATTERN = Pattern.compile(PLACEHOLDER_KEY_REGEX);
@@ -91,7 +93,7 @@ public abstract class ResourcePoint<T> {
 
                 if (PLACEHOLDER_KEY_PATTERN.matcher(key).matches()
                         && PLACEHOLDER_VALUE_PATTERN.matcher(value).matches()) {
-                    String placeholderRegexp = "\\{\\{\\s*" + entry.getKey() + "\\s*\\}{2}";
+                    String placeholderRegexp = PLACEHOLDER_REGEX_PRE + entry.getKey() + PLACEHOLDER_REGEX_POST;
 
                     resourcePath.replaceAll(placeholderRegexp, value);
                 }
