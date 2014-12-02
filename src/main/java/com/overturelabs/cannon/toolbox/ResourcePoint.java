@@ -94,7 +94,7 @@ public abstract class ResourcePoint<T> {
                         && PLACEHOLDER_VALUE_PATTERN.matcher(value).matches()) {
                     String placeholderRegexp = PLACEHOLDER_REGEX_PRE + entry.getKey() + PLACEHOLDER_REGEX_POST;
 
-                    resourcePath.replaceAll(placeholderRegexp, value);
+                    resourcePath = resourcePath.replaceAll(placeholderRegexp, value);
                 }
             }
         }
