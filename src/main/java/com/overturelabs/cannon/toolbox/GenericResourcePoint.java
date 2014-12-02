@@ -23,14 +23,14 @@ public class GenericResourcePoint<T> extends ResourcePoint<T> {
         mSkeletonPath = skeletonPath;
     }
 
-    public GenericResourcePoint(Class<T> classOfT, String baseUrl, String skeletonPath, Map<String, String> params) {
+    public GenericResourcePoint(Class<T> classOfT, String baseUrl, String skeletonPath, final Map<String, String> params) {
         super(baseUrl, params);
 
         mClassOfT = classOfT;
         mSkeletonPath = skeletonPath;
     }
 
-    public GenericResourcePoint(Class<T> classOfT, String baseUrl, String skeletonPath, Map<String, String> params, String oAuth2Token) {
+    public GenericResourcePoint(Class<T> classOfT, String baseUrl, String skeletonPath, final Map<String, String> params, String oAuth2Token) {
         super(baseUrl, params, oAuth2Token);
 
         mClassOfT = classOfT;
