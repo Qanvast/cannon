@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * Created by stevetan on 12/11/14.
  */
 public abstract class ResourcePoint<T> {
-    private final static String SKELETON_PATH_REGEX = "^(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*\\}{2})|[\\w]+))+$";
+    private final static String SKELETON_PATH_REGEX = "^(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*\\}{2})|(?:\\w+[-]*[\\w]*)))+$";
     private final static String PLACEHOLDER_KEY_REGEX = "^[\\d\\w]+$";
     private final static String PLACEHOLDER_VALUE_REGEX = "^[\\d\\w]+$";
     private final static String PLACEHOLDER_REGEX_PRE = "\\{\\{\\s*";
@@ -38,7 +38,6 @@ public abstract class ResourcePoint<T> {
         mParams = params;
         mOAuth2Token = oAuth2Token;
     }
-
 
     /**
      * @param baseUrl       API base URL.
