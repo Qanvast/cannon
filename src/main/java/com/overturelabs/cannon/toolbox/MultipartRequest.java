@@ -31,31 +31,31 @@ public abstract class MultipartRequest<T> extends FireRequest<T> {
 
     private RequestBody mRequestBody;
 
-    public MultipartRequest(int method, String url, Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
+    public MultipartRequest(int method, String url, final Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
 
         build(null, files);
     }
 
-    public MultipartRequest(int method, String url, Map<String, String> params, Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
+    public MultipartRequest(int method, String url, final Map<String, String> params, final Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
 
         build(params, files);
     }
 
-    public MultipartRequest(int method, String url, Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
+    public MultipartRequest(int method, String url, final Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
         super(method, url, oAuth2Token, errorListener);
 
         build(null, files);
     }
 
-    public MultipartRequest(int method, String url, Map<String, String> params, Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
+    public MultipartRequest(int method, String url, final Map<String, String> params, final Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
         super(method, url, oAuth2Token, errorListener);
 
         build(params, files);
     }
 
-    private void build(Map<String, String> params, Map<String, Pair<File, String>> files) {
+    private void build(final Map<String, String> params, final Map<String, Pair<File, String>> files) {
         MultipartBuilder multipartBuilder = new MultipartBuilder().type(MultipartBuilder.FORM);
 
         for (Map.Entry<String, Pair<File, String>> filePart : files.entrySet()) {

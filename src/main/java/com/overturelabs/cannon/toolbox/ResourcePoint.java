@@ -33,7 +33,7 @@ public abstract class ResourcePoint<T> {
      * @param params        Resource path parameters.
      * @param oAuth2Token   OAuth 2.0 Bearer token to be injected into request header.
      */
-    public ResourcePoint(String baseUrl, Map<String, String> params, String oAuth2Token) {
+    public ResourcePoint(String baseUrl, final Map<String, String> params, String oAuth2Token) {
         mBaseUrl = baseUrl;
         mParams = params;
         mOAuth2Token = oAuth2Token;
@@ -52,7 +52,7 @@ public abstract class ResourcePoint<T> {
      * @param baseUrl       API base URL.
      * @param params        Resource path parameters.
      */
-    public ResourcePoint(String baseUrl, Map<String, String> params) {
+    public ResourcePoint(String baseUrl, final Map<String, String> params) {
         mBaseUrl = baseUrl;
         mParams = params;
     }
