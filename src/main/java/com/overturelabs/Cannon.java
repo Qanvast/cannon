@@ -18,6 +18,7 @@ import com.overturelabs.cannon.OkHttpStack;
 import com.overturelabs.cannon.toolbox.GsonMultipartRequest;
 import com.overturelabs.cannon.toolbox.GsonRequest;
 import com.overturelabs.cannon.toolbox.ResourcePoint;
+import com.overturelabs.cannon.toolbox.SwissArmyKnife;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -39,6 +40,7 @@ public class Cannon {
     private static String sUserAgent = "Cannon/0.0.1 (Android)"; // Default user agent string
 
     private static Cannon sInstance;
+    private static Context sApplicationContext;
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
@@ -50,9 +52,9 @@ public class Cannon {
              * context to ensure the request queue persists
              * throughout the application lifecycle.
              */
-            context = context.getApplicationContext();
+            sApplicationContext = context.getApplicationContext();
 
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            PackageInfo pInfo = sApplicationContext.getPackageManager().getPackageInfo(sApplicationContext.getPackageName(), 0);
 
             // Set globals
             String appVersion = pInfo.versionName;
@@ -66,7 +68,7 @@ public class Cannon {
             }
 
             // Based on com.android.volley.toolbox.Volley.java newRequestQueue method.
-            File cacheDir = new File(context.getApplicationContext().getCacheDir(), DISK_CACHE_NAME);
+            File cacheDir = new File(sApplicationContext.getCacheDir(), DISK_CACHE_NAME);
 
             // Create a DiskBasedCache of 300 MiB
             DiskBasedCache diskBasedCache
@@ -131,55 +133,58 @@ public class Cannon {
      * in the request body.
      *
      * @param method                Refer to {@link com.android.volley.Request.Method com.android.volley.Request.Method}.
-     * @param resourcePoint              {@link com.overturelabs.cannon.toolbox.ResourcePoint} object that cannon should be expecting.
+     * @param resourcePoint         {@link com.overturelabs.cannon.toolbox.ResourcePoint} object that cannon should be expecting.
      * @param params                Request body or query parameters, depending on method.
      * @param successListener       Success listener.
-     * @param errorListener  Error listener.
+     * @param errorListener         Error listener.
      * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
+     * @return                      Returns true if cannon was fired, false if otherwise.
      * @throws NotLoadedException   If the Cannon is not loaded, we can't fire it, can we?
      */
-    public static <T> void fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params,
+    public static <T> boolean fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params,
                                              Response.Listener<T> successListener, Response.ErrorListener errorListener) throws NotLoadedException {
         if (SAFETY_SWITCH.get()) {
             // Alas, my captain! The cannon is not loaded!
             throw new NotLoadedException();
         } else {
-            String url = resourcePoint.getUrl();
+            if (SwissArmyKnife.isAppConnectedToNetwork(sApplicationContext)) {
+                String url = resourcePoint.getUrl();
 
-            // Art thou a GET?
-            if (method == Request.Method.GET && params != null && params.size() > 0) {
-                // Thou art!
-                boolean isFirst = true;
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    if (isFirst) {
-                        isFirst = false;
-                        url += "?";
-                    } else {
-                        url += "&";
-                    }
+                // Art thou a GET?
+                if (method == Request.Method.GET && params != null && params.size() > 0) {
+                    // Thou art!
+                    boolean isFirst = true;
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                        if (isFirst) {
+                            isFirst = false;
+                            url += "?";
+                        } else {
+                            url += "&";
+                        }
 
-                    try {
-                        url += URLEncoder.encode(entry.getKey(), DEFAULT_PARAMS_ENCODING);
-                        url += "=";
-                        url += URLEncoder.encode(entry.getValue(), DEFAULT_PARAMS_ENCODING);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        try {
+                            url += URLEncoder.encode(entry.getKey(), DEFAULT_PARAMS_ENCODING);
+                            url += "=";
+                            url += URLEncoder.encode(entry.getValue(), DEFAULT_PARAMS_ENCODING);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
 
-            Request<T> request =
-                    new GsonRequest<T>(
-                            method,
-                            resourcePoint.getResourceClass(),
-                            url,
-                            method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
-                            resourcePoint.getOAuth2Token(),
-                            successListener, errorListener
-                    );
+                Request<T> request =
+                        new GsonRequest<T>(
+                                method,
+                                resourcePoint.getResourceClass(),
+                                url,
+                                method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
+                                resourcePoint.getOAuth2Token(),
+                                successListener, errorListener
+                        );
 
-            if (sInstance != null && sInstance.mRequestQueue != null) {
-                sInstance.mRequestQueue.add(request);
+                return sInstance != null && sInstance.mRequestQueue != null && sInstance.mRequestQueue.add(request) != null;
+            } else {
+                return false;
             }
         }
     }
@@ -200,31 +205,34 @@ public class Cannon {
      * @param params                Request body or query parameters, depending on method.
      * @param files                 Files to be included in the multipart/form request.
      * @param successListener       Success listener.
-     * @param errorListener  Error listener.
+     * @param errorListener         Error listener.
      * @param <T>                   Type of data encapsulated in {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
+     * @return                      Returns true if cannon was fired, false if otherwise.
      * @throws NotLoadedException   If the Cannon is not loaded, we can't fire it, can we?
      */
-    public static <T> void fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params, Map<String, Pair<File, String>> files,
+    public static <T> boolean fire(int method, ResourcePoint<T> resourcePoint, Map<String, String> params, Map<String, Pair<File, String>> files,
                                 Response.Listener<T> successListener, Response.ErrorListener errorListener) throws NotLoadedException {
         if (SAFETY_SWITCH.get()) {
             // Alas, my captain! The cannon is not loaded!
             throw new NotLoadedException();
         } else {
-            String url = resourcePoint.getUrl();
+            if (SwissArmyKnife.isAppConnectedToNetwork(sApplicationContext)) {
+                String url = resourcePoint.getUrl();
 
-            Request<T> request =
-                    new GsonMultipartRequest<T>(
-                            method,
-                            resourcePoint.getResourceClass(),
-                            url,
-                            method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
-                            method != Request.Method.GET ? files: null,
-                            resourcePoint.getOAuth2Token(),
-                            successListener, errorListener
-                    );
+                Request<T> request =
+                        new GsonMultipartRequest<T>(
+                                method,
+                                resourcePoint.getResourceClass(),
+                                url,
+                                method != Request.Method.GET ? params : null, // We only pass in the params to request constructor if it is a GET call.
+                                method != Request.Method.GET ? files: null,
+                                resourcePoint.getOAuth2Token(),
+                                successListener, errorListener
+                        );
 
-            if (sInstance != null && sInstance.mRequestQueue != null) {
-                sInstance.mRequestQueue.add(request);
+                return sInstance != null && sInstance.mRequestQueue != null && sInstance.mRequestQueue.add(request) != null;
+            } else {
+                return false;
             }
         }
     }

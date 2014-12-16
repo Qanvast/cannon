@@ -140,10 +140,11 @@ public abstract class ResourcePoint<T> {
      * @param params                        Query parameters for this request.
      * @param successListener               Success listener.
      * @param errorListener                 Error listener.
+     * @return                              Returns true if request was sent, false if otherwise.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void get(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.GET, this, params, successListener, errorListener);
+    public boolean get(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        return Cannon.fire(Request.Method.GET, this, params, successListener, errorListener);
     }
 
     /**
@@ -152,10 +153,11 @@ public abstract class ResourcePoint<T> {
      * @param params                        POST body for this request.
      * @param successListener               Success listener.
      * @param errorListener                 Error listener.
+     * @return                              Returns true if request was sent, false if otherwise.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void post(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.POST, this, params, successListener, errorListener);
+    public boolean post(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        return Cannon.fire(Request.Method.POST, this, params, successListener, errorListener);
     }
 
     /**
@@ -165,10 +167,11 @@ public abstract class ResourcePoint<T> {
      * @param files                         Files to be included in this multipart/form-date request.
      * @param successListener               Success listener.
      * @param errorListener                 Error listener.
+     * @return                              Returns true if request was sent, false if otherwise.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void post(Map<String, String> params, Map<String, Pair<File, String>> files, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.POST, this, params, files, successListener, errorListener);
+    public boolean post(Map<String, String> params, Map<String, Pair<File, String>> files, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        return Cannon.fire(Request.Method.POST, this, params, files, successListener, errorListener);
     }
 
     /**
@@ -177,10 +180,11 @@ public abstract class ResourcePoint<T> {
      * @param params                        PUT body for this request.
      * @param successListener               Success listener.
      * @param errorListener                 Error listener.
+     * @return                              Returns true if request was sent, false if otherwise.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void put(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.PUT, this, params, successListener, errorListener);
+    public boolean put(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        return Cannon.fire(Request.Method.PUT, this, params, successListener, errorListener);
     }
 
     /**
@@ -190,10 +194,11 @@ public abstract class ResourcePoint<T> {
      * @param files                         Files to be included in this multipart/form-date request.
      * @param successListener               Success listener.
      * @param errorListener                 Error listener.
+     * @return                              Returns true if request was sent, false if otherwise.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void put(Map<String, String> params, Map<String, Pair<File, String>> files, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.PUT, this, params, files, successListener, errorListener);
+    public boolean put(Map<String, String> params, Map<String, Pair<File, String>> files, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        return Cannon.fire(Request.Method.PUT, this, params, files, successListener, errorListener);
     }
 
     /**
@@ -202,10 +207,11 @@ public abstract class ResourcePoint<T> {
      * @param params                        DELETE body for this request.
      * @param successListener               Success listener.
      * @param errorListener                 Error listener.
+     * @return                              Returns true if request was sent, false if otherwise.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void delete(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.DELETE, this, params, successListener, errorListener);
+    public boolean delete(Map<String, String> params, Response.Listener<T> successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        return Cannon.fire(Request.Method.DELETE, this, params, successListener, errorListener);
     }
 
     /**
@@ -214,9 +220,10 @@ public abstract class ResourcePoint<T> {
      * @param params                        PATCH body for this request.
      * @param successListener               Success listener.
      * @param errorListener                 Error listener.
+     * @return                              Returns true if request was sent, false if otherwise.
      * @throws Cannon.NotLoadedException    Can't do much if the cannon is not loaded.
      */
-    public void patch(Map<String, String> params, Response.Listener successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
-        Cannon.fire(Request.Method.PATCH, this, params, successListener, errorListener);
+    public boolean patch(Map<String, String> params, Response.Listener successListener, Response.ErrorListener errorListener) throws Cannon.NotLoadedException {
+        return Cannon.fire(Request.Method.PATCH, this, params, successListener, errorListener);
     }
 }
