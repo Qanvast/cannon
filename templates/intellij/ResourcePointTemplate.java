@@ -9,7 +9,7 @@ import com.overturelabs.Cannon;
 import java.io.File;
 import java.util.Map;
 
-import ${Model_Package_Name};
+import ${Model_Package_Name}.${Model};
 
 /**
  * This is an example data model.
