@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * Resource point is a helper class that acts as an interface to a specific API endpoint.
  */
 public abstract class ResourcePoint<T> {
-    private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
+    private final static String DEFAULT_PARAMS_ENCODING = "UTF-8";
     private final static String SKELETON_PATH_REGEX = "^(?:/(?:(?:\\{\\{\\s*[\\d\\w]+\\s*\\}{2})|(?:\\w+[-]*[\\w]*)))+$";
     private final static Pattern SKELETON_PATH_PATTERN = Pattern.compile(SKELETON_PATH_REGEX);
     private final static String PLACEHOLDER_KEY_REGEX = "^[\\d\\w]+$";
