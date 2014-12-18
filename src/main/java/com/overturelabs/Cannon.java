@@ -43,8 +43,8 @@ public class Cannon {
     private static Context sApplicationContext;
     private static HashMap<Class<? extends ResourcePoint>, ResourcePoint<?>> sResourcePoints;
 
-    private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
+    private static RequestQueue sRequestQueue;
+    private static ImageLoader sImageLoader;
 
     private Cannon(Context context, String appName) {
         try {
@@ -77,10 +77,10 @@ public class Cannon {
 
             HttpStack httpStack = new OkHttpStack();
 
-            mRequestQueue = new RequestQueue(diskBasedCache, new BasicNetwork(httpStack));
-            mRequestQueue.start();
+            sRequestQueue = new RequestQueue(diskBasedCache, new BasicNetwork(httpStack));
+            sRequestQueue.start();
 
-            mImageLoader = new ImageLoader(mRequestQueue, new BitmapLruCache());
+            sImageLoader = new ImageLoader(sRequestQueue, new BitmapLruCache());
         } catch (PackageManager.NameNotFoundException e) {
             // Crashlytics.logException(e);
         }
@@ -151,8 +151,8 @@ public class Cannon {
             throw new NotLoadedException();
         } else {
             return SwissArmyKnife.isAppConnectedToNetwork(sApplicationContext)
-                    && sInstance != null && sInstance.mRequestQueue != null
-                    && sInstance.mRequestQueue.add(request) != null;
+                    && sInstance != null && sInstance.sRequestQueue != null
+                    && sInstance.sRequestQueue.add(request) != null;
         }
     }
 
@@ -240,7 +240,7 @@ public class Cannon {
         }
     }
 
-    public ImageLoader getImageLoader() throws NotLoadedException {
+    public static ImageLoader getImageLoader() throws NotLoadedException {
         /**
          * No need to lock on SAFETY_SWITCH here since we implicitly assumes
          * that Cannon is loaded before user can call this function.
@@ -249,7 +249,7 @@ public class Cannon {
             // Well it looks like the cannon was not loaded. I'll be damned.
             throw new NotLoadedException();
         } else {
-            return mImageLoader;
+            return sImageLoader;
         }
     }
 
