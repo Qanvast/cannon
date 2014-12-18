@@ -26,8 +26,8 @@ class ${Model} {
  * An example of how you can implement a custom resource point.
  */
 public class ${NAME} extends ResourcePoint<${Model}> {
-    public static final String BASE_URL = "http://api.overturelabs.com";
-    public static final String SKELETON_RESOURCE_PATH = "/object/{{ objectId }}";
+    public static final String BASE_URL = "${Base_URL}";
+    public static final String SKELETON_RESOURCE_PATH = "${Skeleton_Resource_Path}";
 
     public ${NAME}() {
         super(BASE_URL, SKELETON_RESOURCE_PATH, ${Model}.class);
