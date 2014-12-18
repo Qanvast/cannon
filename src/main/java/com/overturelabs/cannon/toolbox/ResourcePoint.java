@@ -283,7 +283,7 @@ public class ResourcePoint<T> {
         return mResponseParser;
     }
 
-    /**========================================
+    /*========================================
      *
      * HTTP HELPER METHODS! ** TOTALLY OPTIONAL! **
      *
@@ -291,12 +291,12 @@ public class ResourcePoint<T> {
      * A simple copy and paste would suffice, but make sure you change
      * {@code ResourcePoint.class} to your new class.
      *
-     **========================================*/
+     *========================================*/
 
     /**
      * ========================================
      * GET
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean get(Response.Listener<T> successListener,
@@ -334,7 +334,7 @@ public class ResourcePoint<T> {
     /**
      * ========================================
      * POST
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean post(Response.Listener<T> successListener,
@@ -372,7 +372,7 @@ public class ResourcePoint<T> {
     /**
      * ========================================
      * POST Multi-part
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean postMultipart(final Map<String, Pair<File, String>> files,
@@ -415,7 +415,7 @@ public class ResourcePoint<T> {
     /**
      * ========================================
      * PUT
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean put(Response.Listener<T> successListener,
@@ -453,7 +453,7 @@ public class ResourcePoint<T> {
     /**
      * ========================================
      * PUT Multi-part
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean putMultipart(final Map<String, Pair<File, String>> files,
@@ -496,7 +496,7 @@ public class ResourcePoint<T> {
     /**
      * ========================================
      * PATCH
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean patch(Response.Listener<T> successListener,
@@ -534,7 +534,7 @@ public class ResourcePoint<T> {
     /**
      * ========================================
      * PUT Multi-part
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean patchMultipart(final Map<String, Pair<File, String>> files,
@@ -577,7 +577,7 @@ public class ResourcePoint<T> {
     /**
      * ========================================
      * DELETE
-     * *========================================
+     * ========================================
      */
 
     public static <T> boolean delete(Response.Listener<T> successListener,
