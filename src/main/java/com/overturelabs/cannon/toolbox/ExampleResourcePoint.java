@@ -21,11 +21,11 @@ class ModelObject {
  * An example of how you can implement a custom resource point.
  */
 public class ExampleResourcePoint extends ResourcePoint<ModelObject> {
-    public static final String sbaseUrl = "http://api.overturelabs.com";
-    public static final String sSkeletonResourcePath = "/object/{{ objectId }}";
+    public static final String BASE_URL = "http://api.overturelabs.com";
+    public static final String SKELETON_RESOURCE_PATH = "/object/{{ objectId }}";
 
     public ExampleResourcePoint() {
-        super(sbaseUrl, sSkeletonResourcePath, ModelObject.class);
+        super(BASE_URL, SKELETON_RESOURCE_PATH, ModelObject.class);
     }
 
     /*========================================
