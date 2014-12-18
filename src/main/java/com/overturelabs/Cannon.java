@@ -41,7 +41,7 @@ public class Cannon {
 
     private static Cannon sInstance;
     private static Context sApplicationContext;
-    private static HashMap<Class<? extends ResourcePoint>, ResourcePoint<?>> sResourcePoints;
+    private static HashMap<Class<? extends ResourcePoint>, ResourcePoint<?>> sResourcePoints = new HashMap<>();
 
     private static RequestQueue sRequestQueue;
     private static ImageLoader sImageLoader;
