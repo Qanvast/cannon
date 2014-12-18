@@ -1,6 +1,6 @@
 package com.overturelabs.cannon.toolbox;
 
-import android.support.v4.util.Pair;
+import android.util.Pair;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -27,7 +27,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param url               Request URL.
      * @param files             Files you want to send. The map should contain the form field name as the
-     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          entry's key and a {@link android.util.Pair} containing the
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
      * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
@@ -50,7 +50,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      * @param url               Request URL.
      * @param params            Parameters to be inserted into request body.
      * @param files             Files you want to send. The map should contain the form field name as the
-     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          entry's key and a {@link android.util.Pair} containing the
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
      * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
@@ -73,7 +73,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param url               Request URL.
      * @param files             Files you want to send. The map should contain the form field name as the
-     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          entry's key and a {@link android.util.Pair} containing the
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
      * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
@@ -99,7 +99,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      * @param url               Request URL.
      * @param params            Parameters to be inserted into request body.
      * @param files             Files you want to send. The map should contain the form field name as the
-     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          entry's key and a {@link android.util.Pair} containing the
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
      * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.

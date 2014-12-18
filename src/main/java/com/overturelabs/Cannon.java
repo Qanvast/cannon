@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.util.Pair;
+import android.util.Pair;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -157,83 +157,7 @@ public class Cannon {
     }
 
     /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener)
-            throws NotLoadedException {
-        return fireSinglePartAt(classOfResourcePoint, method, null, null, null, successListener, errorListener);
-    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param resourcePathParams    Parameters for populating placeholders in the skeleton resource path.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-//    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-//                                     Map<String, String> resourcePathParams,
-//                                     Response.Listener<T> successListener,
-//                                     Response.ErrorListener errorListener)
-//            throws NotLoadedException {
-//        return fireSinglePartAt(classOfResourcePoint, method, resourcePathParams, null, null, successListener, errorListener);
-//    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param oAuth2Token           OAuth 2.0 token to be inserted into the request header.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     String oAuth2Token,
-                                     Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener)
-            throws NotLoadedException {
-        return fireSinglePartAt(classOfResourcePoint, method, null, null, oAuth2Token, successListener, errorListener);
-    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param resourcePathParams    Parameters for populating placeholders in the skeleton resource path.
-     * @param oAuth2Token           OAuth 2.0 token to be inserted into the request header.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Map<String, String> resourcePathParams,
-                                     String oAuth2Token,
-                                     Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener)
-            throws NotLoadedException {
-        return fireSinglePartAt(classOfResourcePoint, method, resourcePathParams, null, oAuth2Token, successListener, errorListener);
-    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
+     * CONCENTRATE FIRE AT ZE POINT! FIRE! Fires a simple request at the resource point.
      *
      * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
@@ -243,26 +167,17 @@ public class Cannon {
      * @param oAuth2Token           OAuth 2.0 token to be inserted into the request header.
      * @param successListener       Success {@link com.android.volley.Response.Listener}.
      * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
+     * @param <T>                   Type of expected response object.
      * @return                      Returns true if cannon was fired, false if otherwise.
      * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
      */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Map<String, String> resourcePathParams, 
-                                     Map<String, String> requestParams,
+    public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, int method,
+                                     final Map<String, String> resourcePathParams,
+                                     final Map<String, String> requestParams,
                                      String oAuth2Token,
                                      Response.Listener<T> successListener,
                                      Response.ErrorListener errorListener)
                                      throws NotLoadedException {
-        return fireSinglePartAt(classOfResourcePoint, method, resourcePathParams, requestParams, oAuth2Token, successListener, errorListener);
-    }
-
-    private static <T> boolean fireSinglePartAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                       Map<String, String> resourcePathParams,
-                                       Map<String, String> requestParams,
-                                       String oAuth2Token,
-                                       Response.Listener<T> successListener,
-                                       Response.ErrorListener errorListener)
-                                        throws NotLoadedException {
         ResourcePoint<T> resourcePoint = (ResourcePoint<T>) sResourcePoints.get(classOfResourcePoint);
 
         String url;
@@ -276,94 +191,8 @@ public class Cannon {
         return fire(new GenericRequest<>(method, url, oAuth2Token, resourcePoint.getResponseParser(), successListener, errorListener));
     }
 
-    /**==============================
-     *
-     * MULTIPART
-     *
-     ==============================**/
-
     /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Map<String, Pair<File, String>> files,
-                                     Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener)
-            throws NotLoadedException {
-        return fireAt(classOfResourcePoint, method, null, null, files, null, successListener, errorListener);
-    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param resourcePathParams    Parameters for populating placeholders in the skeleton resource path.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Map<String, String> resourcePathParams,
-                                     Map<String, Pair<File, String>> files,
-                                     Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener)
-            throws NotLoadedException {
-        return fireAt(classOfResourcePoint, method, resourcePathParams, null, files, null, successListener, errorListener);
-    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param oAuth2Token           OAuth 2.0 token to be inserted into the request header.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Map<String, Pair<File, String>> files,
-                                     String oAuth2Token,
-                                     Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener)
-            throws NotLoadedException {
-        return fireAt(classOfResourcePoint, method, null, null, files, oAuth2Token, successListener, errorListener);
-    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
-     *
-     * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
-     * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
-     * @param resourcePathParams    Parameters for populating placeholders in the skeleton resource path.
-     * @param oAuth2Token           OAuth 2.0 token to be inserted into the request header.
-     * @param successListener       Success {@link com.android.volley.Response.Listener}.
-     * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
-     * @return                      Returns true if cannon was fired, false if otherwise.
-     * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
-     */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Map<String, String> resourcePathParams,
-                                     Map<String, Pair<File, String>> files,
-                                     String oAuth2Token,
-                                     Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener)
-            throws NotLoadedException {
-        return fireAt(classOfResourcePoint, method, resourcePathParams, null, files, oAuth2Token, successListener, errorListener);
-    }
-
-    /**
-     * CONCENTRATE FIRE AT ZE POINT! FIRE!
+     * CONCENTRATE FIRE AT ZE POINT! FIRE! Fires a multi-part request at the resource point.
      *
      * @param classOfResourcePoint  {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @param method                HTTP request method. Refer to {@link com.android.volley.Request.Method}.
@@ -371,15 +200,20 @@ public class Cannon {
      * @param requestParams         Request body. If method is {@code GET}, provided parameters will be treated as URL.
      *                              queries and will not be added to the request body but appended to the URL.
      * @param oAuth2Token           OAuth 2.0 token to be inserted into the request header.
+     * @param files                 Files you want to send. The map should contain the form field name as the
+     *                              entry's key and a {@link android.util.Pair} containing the
+     *                              actual {@link java.io.File} and MIME type string.
+     *                              Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
      * @param successListener       Success {@link com.android.volley.Response.Listener}.
      * @param errorListener         {@link com.android.volley.Response.ErrorListener}.
+     * @param <T>                   Type of expected response object.
      * @return                      Returns true if cannon was fired, false if otherwise.
      * @throws NotLoadedException   OMGZ! ZE CANNON IS NOT ZE LOADED! If the Cannon is not loaded, we can't fire it, can we?
      */
-    public static <T> boolean fireAt(Class<ResourcePoint<T>> classOfResourcePoint, int method,
-                                     Map<String, String> resourcePathParams,
-                                     Map<String, String> requestParams,
-                                     Map<String, Pair<File, String>> files,
+    public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, int method,
+                                     final Map<String, String> resourcePathParams,
+                                     final Map<String, String> requestParams,
+                                     final Map<String, Pair<File, String>> files,
                                      String oAuth2Token,
                                      Response.Listener<T> successListener,
                                      Response.ErrorListener errorListener)
@@ -394,7 +228,7 @@ public class Cannon {
             url = resourcePoint.getUrl(resourcePathParams);
         }
 
-        return fire(new MultipartRequest(method, url, files, oAuth2Token, resourcePoint.getResponseParser(), successListener, errorListener));
+        return fire(new MultipartRequest<>(method, url, requestParams, files, oAuth2Token, resourcePoint.getResponseParser(), successListener, errorListener));
     }
 
     public static String getUserAgent() {
