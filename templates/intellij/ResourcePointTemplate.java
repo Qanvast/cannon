@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.overturelabs.Cannon;
+import com.overturelabs.cannon.toolbox.ResourcePoint;
 
 import java.io.File;
 import java.util.Map;
