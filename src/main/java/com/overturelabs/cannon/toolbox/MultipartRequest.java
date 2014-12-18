@@ -1,11 +1,9 @@
 package com.overturelabs.cannon.toolbox;
 
 import android.support.v4.util.Pair;
-import android.webkit.MimeTypeMap;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
-import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.RequestBody;
@@ -17,40 +15,104 @@ import java.util.Map;
 import okio.Buffer;
 
 /**
- * So basically we need all the parts of this multipart request during construction of the request.
- * We need a header for each part, which consists of {@code Content-Disposition: form-data; name="my-control-name"}.
- * We also need the data (of course), which can be either a string or a file.
- *
- * Created by stevetan on 18/11/14.
+ * Multipart Request.
  */
-public abstract class MultipartRequest<T> extends FireRequest<T> {
-
-    private final static String PART_HEADER_NAME = "Content-Disposition";
-    private final static String PART_HEADER_VALUE_PRE = "form-data; name=\"";
-    private final static String PART_HEADER_VALUE_POST = "\"";
+public class MultipartRequest<T> extends GenericRequest<T> {
 
     private RequestBody mRequestBody;
 
-    public MultipartRequest(int method, String url, final Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
-        super(method, url, errorListener);
+    /**
+     * Construct a {@link com.overturelabs.cannon.toolbox.MultipartRequest}.
+     *
+     * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
+     * @param url               Request URL.
+     * @param files             Files you want to send. The map should contain the form field name as the
+     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          actual {@link java.io.File} and MIME type string.
+     *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param successListener   Success {@link com.android.volley.Response.Listener}.
+     * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
+     */
+    public MultipartRequest(int method, String url, final Map<String, Pair<File, String>> files,
+                            ResponseParser<T> responseParser,
+                            Response.Listener<T> successListener,
+                            Response.ErrorListener errorListener) {
+        super(method, url, responseParser, successListener, errorListener);
 
         build(null, files);
     }
 
-    public MultipartRequest(int method, String url, final Map<String, String> params, final Map<String, Pair<File, String>> files, Response.ErrorListener errorListener) {
-        super(method, url, errorListener);
+    /**
+     * Construct a {@link com.overturelabs.cannon.toolbox.MultipartRequest}.
+     *
+     * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
+     * @param url               Request URL.
+     * @param params            Parameters to be inserted into request body.
+     * @param files             Files you want to send. The map should contain the form field name as the
+     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          actual {@link java.io.File} and MIME type string.
+     *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param successListener   Success {@link com.android.volley.Response.Listener}.
+     * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
+     */
+    public MultipartRequest(int method, String url, final Map<String, String> params,
+                            final Map<String, Pair<File, String>> files,
+                            ResponseParser<T> responseParser,
+                            Response.Listener<T> successListener,
+                            Response.ErrorListener errorListener) {
+        super(method, url, responseParser, successListener, errorListener);
 
         build(params, files);
     }
 
-    public MultipartRequest(int method, String url, final Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
-        super(method, url, oAuth2Token, errorListener);
+    /**
+     * Construct a {@link com.overturelabs.cannon.toolbox.MultipartRequest}.
+     *
+     * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
+     * @param url               Request URL.
+     * @param files             Files you want to send. The map should contain the form field name as the
+     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          actual {@link java.io.File} and MIME type string.
+     *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
+     * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param successListener   Success {@link com.android.volley.Response.Listener}.
+     * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
+     */
+    public MultipartRequest(int method, String url, final Map<String, Pair<File, String>> files,
+                            String oAuth2Token,
+                            ResponseParser<T> responseParser,
+                            Response.Listener<T> successListener,
+                            Response.ErrorListener errorListener) {
+        super(method, url, oAuth2Token, responseParser, successListener, errorListener);
 
         build(null, files);
     }
 
-    public MultipartRequest(int method, String url, final Map<String, String> params, final Map<String, Pair<File, String>> files, String oAuth2Token, Response.ErrorListener errorListener) {
-        super(method, url, oAuth2Token, errorListener);
+
+    /**
+     * Construct a {@link com.overturelabs.cannon.toolbox.MultipartRequest}.
+     *
+     * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
+     * @param url               Request URL.
+     * @param params            Parameters to be inserted into request body.
+     * @param files             Files you want to send. The map should contain the form field name as the
+     *                          entry's key and a {@link android.support.v4.util.Pair} containing the
+     *                          actual {@link java.io.File} and MIME type string.
+     *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
+     * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param successListener   Success {@link com.android.volley.Response.Listener}.
+     * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
+     */
+    public MultipartRequest(int method, String url, final Map<String, String> params,
+                            final Map<String, Pair<File, String>> files, String oAuth2Token,
+                            ResponseParser<T> responseParser,
+                            Response.Listener<T> successListener,
+                            Response.ErrorListener errorListener) {
+        super(method, url, oAuth2Token, responseParser, successListener, errorListener);
 
         build(params, files);
     }
