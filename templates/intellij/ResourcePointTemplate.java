@@ -8,6 +8,7 @@ import com.overturelabs.Cannon;
 import com.overturelabs.cannon.toolbox.ResourcePoint;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import ${Model_Package_Name}.${Model};
