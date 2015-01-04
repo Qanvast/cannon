@@ -24,13 +24,13 @@ public class DateDeserializer implements JsonDeserializer<Date> {
 
     @Override
     public Date deserialize(JsonElement element, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        String date = element.getAsString();
-
-        SimpleDateFormat formatter = new SimpleDateFormat(MONGODB_UTC_FORMAT);
-        formatter.setTimeZone(TimeZone.getDefault()); // Get the default timezone.
-
         try {
-            return formatter.parse(date);
+            String dateString = element.getAsString();
+
+            SimpleDateFormat formatter = new SimpleDateFormat(MONGODB_UTC_FORMAT);
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            return formatter.parse(dateString);
         } catch (ParseException e) {
             Log.e(Cannon.TAG, "Unable to parse date. (" + e.getMessage() + ")");
             return null;
