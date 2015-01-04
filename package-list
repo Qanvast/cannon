@@ -1,3 +1,5 @@
 com.overturelabs
 com.overturelabs.cannon
 com.overturelabs.cannon.toolbox
+com.overturelabs.cannon.toolbox.gson.deserializers
+com.overturelabs.cannon.toolbox.gson.parsers
