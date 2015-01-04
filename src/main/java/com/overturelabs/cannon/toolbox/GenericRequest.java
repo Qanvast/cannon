@@ -8,6 +8,12 @@ import com.overturelabs.Cannon;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Generic request class that supports OAuth 2.0 bearer tokens.
+ *
+ * @param <T>   Type of expected response object.
+ * @author      Steve Tan
+ */
 public class GenericRequest<T> extends Request<T> {
     private Map<String, String> mParams;
     private String mOAuth2Token = null;

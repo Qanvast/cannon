@@ -16,6 +16,9 @@ import okio.Buffer;
 
 /**
  * Multipart Request.
+ *
+ * @param <T>   Type of expected response object.
+ * @author      Steve Tan
  */
 public class MultipartRequest<T> extends GenericRequest<T> {
 

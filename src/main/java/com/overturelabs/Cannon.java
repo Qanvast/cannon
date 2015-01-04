@@ -32,10 +32,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Steve Tan
  */
 public class Cannon {
+    public static final String TAG = "Cannon";
+
     private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
     private static final int DISK_CACHE_MEMORY_ALLOCATION = 300; // 300 MiB
     private static final String DISK_CACHE_NAME = "AmmunitionBox";
-    private static final String TAG = "Cannon";
 
     private static final AtomicBoolean SAFETY_SWITCH = new AtomicBoolean(true); // If safety switch is set, you can't fire the cannon! Loading the cannon will disable the safety switch.
 

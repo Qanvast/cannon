@@ -5,7 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by stevetan on 16/12/14.
+ * Swiss army knife of helper methods.
+ *
+ * @author      Steve Tan
  */
 public class SwissArmyKnife {
 
