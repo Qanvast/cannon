@@ -1,4 +1,4 @@
-package com.overturelabs.cannon.toolbox.gson.parsers;
+package com.overturelabs.cannon.toolbox.parsers;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;

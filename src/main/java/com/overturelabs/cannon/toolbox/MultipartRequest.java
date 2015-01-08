@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
+import com.overturelabs.cannon.toolbox.parsers.ResponseParser;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.RequestBody;
@@ -33,7 +34,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      *                          entry's key and a {@link android.util.Pair} containing the
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
@@ -56,7 +57,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      *                          entry's key and a {@link android.util.Pair} containing the
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
@@ -80,7 +81,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
      * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
@@ -106,7 +107,7 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
      * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */

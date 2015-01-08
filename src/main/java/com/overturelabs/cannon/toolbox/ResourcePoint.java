@@ -1,7 +1,8 @@
 package com.overturelabs.cannon.toolbox;
 
-import com.overturelabs.cannon.toolbox.gson.parsers.GsonResponseParser;
-import com.overturelabs.cannon.toolbox.gson.parsers.StringResponseParser;
+import com.overturelabs.cannon.toolbox.parsers.GsonResponseParser;
+import com.overturelabs.cannon.toolbox.parsers.ResponseParser;
+import com.overturelabs.cannon.toolbox.parsers.StringResponseParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -30,7 +31,7 @@ public abstract class ResourcePoint<T> {
     private ResponseParser mResponseParser;
 
     /**
-     * Constructs a resource point with a default {@link com.overturelabs.cannon.toolbox.gson.parsers.StringResponseParser}.
+     * Constructs a resource point with a default {@link com.overturelabs.cannon.toolbox.parsers.StringResponseParser}.
      *
      * @param baseUrl API base URL.
      */
@@ -40,10 +41,10 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Constructs a resource point with a custom {@link com.overturelabs.cannon.toolbox.ResponseParser}.
+     * Constructs a resource point with a custom {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser}.
      *
      * @param baseUrl        API base URL.
-     * @param responseParser {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      */
     public ResourcePoint(String baseUrl, ResponseParser<T> responseParser) {
         mBaseUrl = baseUrl;
@@ -51,7 +52,7 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Constructs a resource point that uses a {@link com.overturelabs.cannon.toolbox.gson.parsers.GsonResponseParser}
+     * Constructs a resource point that uses a {@link com.overturelabs.cannon.toolbox.parsers.GsonResponseParser}
      * to parse an object of the specified resource class.
      *
      * @param baseUrl       API base URL.
@@ -63,7 +64,7 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Constructs a resource point with a default {@link com.overturelabs.cannon.toolbox.gson.parsers.StringResponseParser}.
+     * Constructs a resource point with a default {@link com.overturelabs.cannon.toolbox.parsers.StringResponseParser}.
      *
      * @param baseUrl              API base URL.
      * @param skeletonResourcePath Skeleton resource path is a resource path with placeholders
@@ -89,7 +90,7 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Constructs a resource point with a custom {@link com.overturelabs.cannon.toolbox.ResponseParser}.
+     * Constructs a resource point with a custom {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser}.
      *
      * @param baseUrl              API base URL.
      * @param skeletonResourcePath Skeleton resource path is a resource path with placeholders
@@ -107,7 +108,7 @@ public abstract class ResourcePoint<T> {
      *                             <br/>
      *                             {@link ResourcePoint#getResourcePath(java.util.Map)} will replace the placeholders with
      *                             provided parameters.
-     * @param responseParser       {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser       {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      */
     public ResourcePoint(String baseUrl, String skeletonResourcePath, ResponseParser<T> responseParser) {
         mBaseUrl = baseUrl;
@@ -116,7 +117,7 @@ public abstract class ResourcePoint<T> {
     }
 
     /**
-     * Constructs a resource point that uses a {@link com.overturelabs.cannon.toolbox.gson.parsers.GsonResponseParser}
+     * Constructs a resource point that uses a {@link com.overturelabs.cannon.toolbox.parsers.GsonResponseParser}
      * to parse an object of the specified resource class.
      *
      * @param baseUrl              API base URL.
@@ -310,9 +311,9 @@ public abstract class ResourcePoint<T> {
      * Response parser is used to parse any successful response. Overide
      * this method in your child class to change to a different response parser.
      * <br/>
-     * By default, a {@link com.overturelabs.cannon.toolbox.gson.parsers.GsonResponseParser} is used.
+     * By default, a {@link com.overturelabs.cannon.toolbox.parsers.GsonResponseParser} is used.
      *
-     * @return Returns a {@link com.overturelabs.cannon.toolbox.ResponseParser}
+     * @return Returns a {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser}
      */
     public ResponseParser<T> getResponseParser() {
         return mResponseParser;
