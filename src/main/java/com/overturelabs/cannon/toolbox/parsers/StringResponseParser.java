@@ -2,15 +2,23 @@ package com.overturelabs.cannon.toolbox.parsers;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
-import com.overturelabs.cannon.toolbox.ResponseParser;
+import com.android.volley.toolbox.HttpHeaderParser;
+
+import java.io.UnsupportedEncodingException;
 
 /**
- * {@link com.overturelabs.cannon.toolbox.ResponseParser} for {@link java.lang.String} responses.
+ * {@link ResponseParser} for {@link java.lang.String} responses.
  * @author Steve Tan
  */
 public class StringResponseParser implements ResponseParser<String> {
     @Override
     public Response<String> parseNetworkResponse(NetworkResponse response) {
-        return null;
+        String parsed;
+        try {
+            parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+        } catch (UnsupportedEncodingException e) {
+            parsed = new String(response.data);
+        }
+        return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
     }
 }

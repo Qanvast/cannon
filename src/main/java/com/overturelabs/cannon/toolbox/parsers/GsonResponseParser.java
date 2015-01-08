@@ -7,14 +7,13 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.overturelabs.cannon.toolbox.ResponseParser;
 import com.overturelabs.cannon.toolbox.gson.deserializers.DateDeserializer;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 /**
- * {@link com.overturelabs.cannon.toolbox.ResponseParser} for {@link com.google.gson.Gson} objects.
+ * {@link ResponseParser} for {@link com.google.gson.Gson} objects.
  *
  * @param <T> Expected class of response object.
  * @author Steve Tan
