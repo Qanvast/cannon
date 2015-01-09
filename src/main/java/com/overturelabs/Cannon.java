@@ -166,6 +166,7 @@ public class Cannon {
      * @param classOfResourcePoint {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @param method               HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param resourcePathParams   Parameters for populating placeholders in the skeleton resource path.
+     * @param requestHeaders       Request headers.
      * @param requestParams        Request body. If method is {@code GET}, provided parameters will be treated as URL.
      *                             queries and will not be added to the request body but appended to the URL.
      * @param oAuth2Token          OAuth 2.0 token to be inserted into the request header.
@@ -178,12 +179,13 @@ public class Cannon {
      */
     public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, int method,
                                      final Map<String, String> resourcePathParams,
+                                     final Map<String, String> requestHeaders,
                                      final Map<String, String> requestParams,
                                      String oAuth2Token,
                                      Response.Listener<T> successListener,
                                      Response.ErrorListener errorListener)
             throws NotLoadedException, UnsupportedEncodingException {
-        return fireAt(classOfResourcePoint, method, resourcePathParams, requestParams, DEFAULT_PARAMS_ENCODING, oAuth2Token, successListener, errorListener);
+        return fireAt(classOfResourcePoint, method, resourcePathParams, requestHeaders, requestParams, DEFAULT_PARAMS_ENCODING, oAuth2Token, successListener, errorListener);
     }
 
     /**
@@ -192,6 +194,7 @@ public class Cannon {
      * @param classOfResourcePoint {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @param method               HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param resourcePathParams   Parameters for populating placeholders in the skeleton resource path.
+     * @param requestHeaders       Request headers.
      * @param requestParams        Request body. If method is {@code GET}, provided parameters will be treated as URL.
      *                             queries and will not be added to the request body but appended to the URL.
      * @param encoding             Charset to encode the URL in.
@@ -205,6 +208,7 @@ public class Cannon {
      */
     public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, int method,
                                      final Map<String, String> resourcePathParams,
+                                     final Map<String, String> requestHeaders,
                                      final Map<String, String> requestParams,
                                      String encoding,
                                      String oAuth2Token,
@@ -221,7 +225,7 @@ public class Cannon {
             url = resourcePoint.getUrl(resourcePathParams, encoding);
         }
 
-        return fire(new GenericRequest<>(method, url, requestParams, oAuth2Token, resourcePoint.getResponseParser(), successListener, errorListener));
+        return fire(new GenericRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
     }
 
     /**
@@ -230,6 +234,7 @@ public class Cannon {
      * @param classOfResourcePoint {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @param method               HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param resourcePathParams   Parameters for populating placeholders in the skeleton resource path.
+     * @param requestHeaders       Request headers.
      * @param requestParams        Request body. If method is {@code GET}, provided parameters will be treated as URL.
      *                             queries and will not be added to the request body but appended to the URL.
      * @param oAuth2Token          OAuth 2.0 token to be inserted into the request header.
@@ -246,13 +251,14 @@ public class Cannon {
      */
     public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, int method,
                                      final Map<String, String> resourcePathParams,
+                                     final Map<String, String> requestHeaders,
                                      final Map<String, String> requestParams,
                                      final Map<String, Pair<File, String>> files,
                                      String oAuth2Token,
                                      Response.Listener<T> successListener,
                                      Response.ErrorListener errorListener)
             throws NotLoadedException, UnsupportedEncodingException {
-        return fireAt(classOfResourcePoint, method, resourcePathParams, requestParams, DEFAULT_PARAMS_ENCODING, files, oAuth2Token, successListener, errorListener);
+        return fireAt(classOfResourcePoint, method, resourcePathParams, requestHeaders, requestParams, DEFAULT_PARAMS_ENCODING, files, oAuth2Token, successListener, errorListener);
     }
 
     /**
@@ -261,6 +267,7 @@ public class Cannon {
      * @param classOfResourcePoint {@link java.lang.Class} of {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
      * @param method               HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param resourcePathParams   Parameters for populating placeholders in the skeleton resource path.
+     * @param requestHeaders       Request headers.
      * @param requestParams        Request body. If method is {@code GET}, provided parameters will be treated as URL.
      *                             queries and will not be added to the request body but appended to the URL.
      * @param encoding             Charset to encode the URL in.
@@ -278,6 +285,7 @@ public class Cannon {
      */
     public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, int method,
                                      final Map<String, String> resourcePathParams,
+                                     final Map<String, String> requestHeaders,
                                      final Map<String, String> requestParams,
                                      String encoding,
                                      final Map<String, Pair<File, String>> files,
@@ -295,7 +303,7 @@ public class Cannon {
             url = resourcePoint.getUrl(resourcePathParams, encoding);
         }
 
-        return fire(new MultipartRequest<>(method, url, requestParams, files, oAuth2Token, resourcePoint.getResponseParser(), successListener, errorListener));
+        return fire(new MultipartRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, files, resourcePoint.getResponseParser(), successListener, errorListener));
     }
 
     public static String getUserAgent() {

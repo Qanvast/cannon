@@ -52,26 +52,26 @@ public class ${NAME} extends ResourcePoint<${Model}> {
 
     public static boolean get(Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.GET, null, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.GET, null, null, null, null, successListener, errorListener);
     }
 
     public static boolean get(final Map<String, String> resourcePathParams,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.GET, resourcePathParams, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.GET, resourcePathParams, null, null, null, successListener, errorListener);
     }
 
     public static boolean get(String oAuth2Token,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.GET, null, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.GET, null, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean get(final Map<String, String> resourcePathParams,
                               String oAuth2Token,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.GET, resourcePathParams, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.GET, resourcePathParams,  null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean get(final Map<String, String> resourcePathParams,
@@ -79,7 +79,16 @@ public class ${NAME} extends ResourcePoint<${Model}> {
                               String oAuth2Token,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.GET, resourcePathParams, requestParams, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.GET, resourcePathParams,  null, requestParams, oAuth2Token, successListener, errorListener);
+    }
+
+    public static boolean get(final Map<String, String> resourcePathParams,
+                              final Map<String, String> requestHeaders,
+                              final Map<String, String> requestParams,
+                              String oAuth2Token,
+                              Response.Listener<${Model}> successListener,
+                              Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
+        return Cannon.fireAt(${NAME}.class Request.Method.GET, resourcePathParams,  requestHeaders, requestParams, oAuth2Token, successListener, errorListener);
     }
 
     /*
@@ -90,34 +99,35 @@ public class ${NAME} extends ResourcePoint<${Model}> {
 
     public static boolean post(Response.Listener<${Model}> successListener,
                                Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, null, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, null, null, null, null, successListener, errorListener);
     }
 
     public static boolean post(final Map<String, String> resourcePathParams,
                                Response.Listener<${Model}> successListener,
                                Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, resourcePathParams, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, resourcePathParams, null, null, null, successListener, errorListener);
     }
 
     public static boolean post(String oAuth2Token,
                                Response.Listener<${Model}> successListener,
                                Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, null, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, null, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean post(final Map<String, String> resourcePathParams,
                                String oAuth2Token,
                                Response.Listener<${Model}> successListener,
                                Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, resourcePathParams, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, resourcePathParams, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean post(final Map<String, String> resourcePathParams,
+                               final Map<String, String> requestHeaders,
                                final Map<String, String> requestParams,
                                String oAuth2Token,
                                Response.Listener<${Model}> successListener,
                                Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, resourcePathParams, requestParams, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, resourcePathParams, requestHeaders, requestParams, oAuth2Token, successListener, errorListener);
     }
 
     /*
@@ -129,21 +139,21 @@ public class ${NAME} extends ResourcePoint<${Model}> {
     public static boolean postMultipart(final Map<String, Pair<File, String>> files,
                                         Response.Listener<${Model}> successListener,
                                         Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, null, null, files, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, null, null, null, files, null, successListener, errorListener);
     }
 
     public static boolean postMultipart(final Map<String, String> resourcePathParams,
                                         final Map<String, Pair<File, String>> files,
                                         Response.Listener<${Model}> successListener,
                                         Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, resourcePathParams, null, files, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, resourcePathParams, null, null, files, null, successListener, errorListener);
     }
 
     public static boolean postMultipart(final Map<String, Pair<File, String>> files,
                                         String oAuth2Token,
                                         Response.Listener<${Model}> successListener,
                                         Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, null, null, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, null, null, null, files, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean postMultipart(final Map<String, String> resourcePathParams,
@@ -151,16 +161,17 @@ public class ${NAME} extends ResourcePoint<${Model}> {
                                         String oAuth2Token,
                                         Response.Listener<${Model}> successListener,
                                         Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, resourcePathParams, null, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, resourcePathParams, null, null, files, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean postMultipart(final Map<String, String> resourcePathParams,
+                                        final Map<String, String> requestHeaders,
                                         final Map<String, String> requestParams,
                                         final Map<String, Pair<File, String>> files,
                                         String oAuth2Token,
                                         Response.Listener<${Model}> successListener,
                                         Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.POST, resourcePathParams, requestParams, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.POST, resourcePathParams, requestHeaders, requestParams, files, oAuth2Token, successListener, errorListener);
     }
 
     /*
@@ -171,34 +182,35 @@ public class ${NAME} extends ResourcePoint<${Model}> {
 
     public static boolean put(Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, null, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, null, null, null, null, successListener, errorListener);
     }
 
     public static boolean put(final Map<String, String> resourcePathParams,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, resourcePathParams, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, resourcePathParams, null, null, null, successListener, errorListener);
     }
 
     public static boolean put(String oAuth2Token,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, null, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, null, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean put(final Map<String, String> resourcePathParams,
                               String oAuth2Token,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, resourcePathParams, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, resourcePathParams, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean put(final Map<String, String> resourcePathParams,
+                              final Map<String, String> requestHeaders,
                               final Map<String, String> requestParams,
                               String oAuth2Token,
                               Response.Listener<${Model}> successListener,
                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, resourcePathParams, requestParams, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, resourcePathParams, requestHeaders, requestParams, oAuth2Token, successListener, errorListener);
     }
 
     /*
@@ -210,21 +222,21 @@ public class ${NAME} extends ResourcePoint<${Model}> {
     public static boolean putMultipart(final Map<String, Pair<File, String>> files,
                                        Response.Listener<${Model}> successListener,
                                        Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, null, null, files, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, null, null, null, files, null, successListener, errorListener);
     }
 
     public static boolean putMultipart(final Map<String, String> resourcePathParams,
                                        final Map<String, Pair<File, String>> files,
                                        Response.Listener<${Model}> successListener,
                                        Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, resourcePathParams, null, files, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, resourcePathParams, null, null, files, null, successListener, errorListener);
     }
 
     public static boolean putMultipart(final Map<String, Pair<File, String>> files,
                                        String oAuth2Token,
                                        Response.Listener<${Model}> successListener,
                                        Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, null, null, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, null, null, null, files, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean putMultipart(final Map<String, String> resourcePathParams,
@@ -232,16 +244,17 @@ public class ${NAME} extends ResourcePoint<${Model}> {
                                        String oAuth2Token,
                                        Response.Listener<${Model}> successListener,
                                        Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, resourcePathParams, null, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, resourcePathParams, null, null, files, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean putMultipart(final Map<String, String> resourcePathParams,
+                                       final Map<String, String> requestHeaders,
                                        final Map<String, String> requestParams,
                                        final Map<String, Pair<File, String>> files,
                                        String oAuth2Token,
                                        Response.Listener<${Model}> successListener,
                                        Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PUT, resourcePathParams, requestParams, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PUT, resourcePathParams, requestHeaders, requestParams, files, oAuth2Token, successListener, errorListener);
     }
 
     /*
@@ -252,34 +265,35 @@ public class ${NAME} extends ResourcePoint<${Model}> {
 
     public static boolean patch(Response.Listener<${Model}> successListener,
                                 Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, null, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, null, null, null, null, successListener, errorListener);
     }
 
     public static boolean patch(final Map<String, String> resourcePathParams,
                                 Response.Listener<${Model}> successListener,
                                 Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, resourcePathParams, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, resourcePathParams, null, null, null, successListener, errorListener);
     }
 
     public static boolean patch(String oAuth2Token,
                                 Response.Listener<${Model}> successListener,
                                 Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, null, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, null, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean patch(final Map<String, String> resourcePathParams,
                                 String oAuth2Token,
                                 Response.Listener<${Model}> successListener,
                                 Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, resourcePathParams, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, resourcePathParams, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean patch(final Map<String, String> resourcePathParams,
+                                final Map<String, String> requestHeaders,
                                 final Map<String, String> requestParams,
                                 String oAuth2Token,
                                 Response.Listener<${Model}> successListener,
                                 Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, resourcePathParams, requestParams, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, resourcePathParams, requestHeaders, requestParams, oAuth2Token, successListener, errorListener);
     }
 
     /*
@@ -291,21 +305,21 @@ public class ${NAME} extends ResourcePoint<${Model}> {
     public static boolean patchMultipart(final Map<String, Pair<File, String>> files,
                                          Response.Listener<${Model}> successListener,
                                          Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, null, null, files, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, null, null, null, files, null, successListener, errorListener);
     }
 
     public static boolean patchMultipart(final Map<String, String> resourcePathParams,
                                          final Map<String, Pair<File, String>> files,
                                          Response.Listener<${Model}> successListener,
                                          Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, resourcePathParams, null, files, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, resourcePathParams, null, null, files, null, successListener, errorListener);
     }
 
     public static boolean patchMultipart(final Map<String, Pair<File, String>> files,
                                          String oAuth2Token,
                                          Response.Listener<${Model}> successListener,
                                          Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, null, null, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, null, null, null, files, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean patchMultipart(final Map<String, String> resourcePathParams,
@@ -313,16 +327,17 @@ public class ${NAME} extends ResourcePoint<${Model}> {
                                          String oAuth2Token,
                                          Response.Listener<${Model}> successListener,
                                          Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, resourcePathParams, null, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, resourcePathParams, null, null, files, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean patchMultipart(final Map<String, String> resourcePathParams,
+                                         final Map<String, String> requestHeaders,
                                          final Map<String, String> requestParams,
                                          final Map<String, Pair<File, String>> files,
                                          String oAuth2Token,
                                          Response.Listener<${Model}> successListener,
                                          Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.PATCH, resourcePathParams, requestParams, files, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.PATCH, resourcePathParams, requestHeaders, requestParams, files, oAuth2Token, successListener, errorListener);
     }
 
     /*
@@ -333,33 +348,34 @@ public class ${NAME} extends ResourcePoint<${Model}> {
 
     public static boolean delete(Response.Listener<${Model}> successListener,
                                  Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.DELETE, null, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.DELETE, null, null, null, null, successListener, errorListener);
     }
 
     public static boolean delete(final Map<String, String> resourcePathParams,
                                  Response.Listener<${Model}> successListener,
                                  Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.DELETE, resourcePathParams, null, null, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.DELETE, resourcePathParams, null, null, null, successListener, errorListener);
     }
 
     public static boolean delete(String oAuth2Token,
                                  Response.Listener<${Model}> successListener,
                                  Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.DELETE, null, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.DELETE, null, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean delete(final Map<String, String> resourcePathParams,
                                  String oAuth2Token,
                                  Response.Listener<${Model}> successListener,
                                  Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.DELETE, resourcePathParams, null, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.DELETE, resourcePathParams, null, null, oAuth2Token, successListener, errorListener);
     }
 
     public static boolean delete(final Map<String, String> resourcePathParams,
+                                 final Map<String, String> requestHeaders,
                                  final Map<String, String> requestParams,
                                  String oAuth2Token,
                                  Response.Listener<${Model}> successListener,
                                  Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(${NAME}.class, Request.Method.DELETE, resourcePathParams, requestParams, oAuth2Token, successListener, errorListener);
+        return Cannon.fireAt(${NAME}.class Request.Method.DELETE, resourcePathParams, requestHeaders, requestParams, oAuth2Token, successListener, errorListener);
     }
 }

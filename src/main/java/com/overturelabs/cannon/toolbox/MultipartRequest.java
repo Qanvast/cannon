@@ -81,12 +81,13 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
-    public MultipartRequest(int method, String url, final Map<String, Pair<File, String>> files,
-                            String oAuth2Token,
+    public MultipartRequest(int method, String url,
+                            final Map<String, String> headers, String oAuth2Token,
+                            final Map<String, Pair<File, String>> files,
                             ResponseParser<T> responseParser,
                             Response.Listener<T> successListener,
                             Response.ErrorListener errorListener) {
-        super(method, url, oAuth2Token, responseParser, successListener, errorListener);
+        super(method, url, headers, oAuth2Token, responseParser, successListener, errorListener);
 
         build(null, files);
     }
@@ -97,22 +98,25 @@ public class MultipartRequest<T> extends GenericRequest<T> {
      *
      * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param url               Request URL.
+     * @param headers           Headers to be inserted into request header.
+     * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
      * @param params            Parameters to be inserted into request body.
      * @param files             Files you want to send. The map should contain the form field name as the
      *                          entry's key and a {@link android.util.Pair} containing the
      *                          actual {@link java.io.File} and MIME type string.
      *                          Refer to {@link android.content.ContentResolver#getType(android.net.Uri)}.
-     * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
      * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
-    public MultipartRequest(int method, String url, final Map<String, String> params,
-                            final Map<String, Pair<File, String>> files, String oAuth2Token,
+    public MultipartRequest(int method, String url,
+                            final Map<String, String> headers, String oAuth2Token,
+                            final Map<String, String> params,
+                            final Map<String, Pair<File, String>> files,
                             ResponseParser<T> responseParser,
                             Response.Listener<T> successListener,
                             Response.ErrorListener errorListener) {
-        super(method, url, oAuth2Token, responseParser, successListener, errorListener);
+        super(method, url, headers, oAuth2Token, responseParser, successListener, errorListener);
 
         build(params, files);
     }

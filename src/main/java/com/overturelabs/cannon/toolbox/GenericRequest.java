@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GenericRequest<T> extends Request<T> {
+    private Map<String, String> mHeaders;
     private Map<String, String> mParams;
     private String mOAuth2Token = null;
     private ResponseParser<T> mResponseParser;
@@ -43,11 +44,34 @@ public class GenericRequest<T> extends Request<T> {
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
     public GenericRequest(int method, String url, ResponseParser<T> responseParser,
-                          Map<String, String> params,
+                          final Map<String, String> params,
                           Response.Listener<T> successListener,
                           Response.ErrorListener errorListener) {
         super(method, url, errorListener);
 
+        this.mParams = params;
+        this.mResponseParser = responseParser;
+        this.mListener = successListener;
+    }
+
+    /**
+     * Construct a {@link com.overturelabs.cannon.toolbox.GenericRequest}.
+     *
+     * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
+     * @param url               Request URL.
+     * @param headers           Headers to be inserted into request header.
+     * @param params            Parameters to be inserted into request body
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param successListener   Success {@link com.android.volley.Response.Listener}.
+     * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
+     */
+    public GenericRequest(int method, String url, ResponseParser<T> responseParser,
+                          final Map<String, String> headers, final Map<String, String> params,
+                          Response.Listener<T> successListener,
+                          Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
+
+        this.mHeaders = headers;
         this.mParams = params;
         this.mResponseParser = responseParser;
         this.mListener = successListener;
@@ -79,20 +103,71 @@ public class GenericRequest<T> extends Request<T> {
      *
      * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param url               Request URL.
-     * @param params            Parameters to be inserted into request body.
+     * @param headers           Headers to be inserted into request header.
      * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
      * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
-    public GenericRequest(int method, String url, Map<String, String> params, String oAuth2Token,
+    public GenericRequest(int method, String url,
+                          final Map<String, String> headers, String oAuth2Token,
                           ResponseParser<T> responseParser,
                           Response.Listener<T> successListener,
                           Response.ErrorListener errorListener) {
         super(method, url, errorListener);
 
-        this.mParams = params;
+        this.mHeaders = headers;
         this.mOAuth2Token = oAuth2Token;
+        this.mResponseParser = responseParser;
+        this.mListener = successListener;
+    }
+
+    /**
+     * Construct a {@link com.overturelabs.cannon.toolbox.GenericRequest}.
+     *
+     * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
+     * @param url               Request URL.
+     * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
+     * @param params            Parameters to be inserted into request body.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param successListener   Success {@link com.android.volley.Response.Listener}.
+     * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
+     */
+    public GenericRequest(int method, String url, String oAuth2Token, final Map<String, String> params,
+                          ResponseParser<T> responseParser,
+                          Response.Listener<T> successListener,
+                          Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
+
+        this.mOAuth2Token = oAuth2Token;
+        this.mParams = params;
+        this.mResponseParser = responseParser;
+        this.mListener = successListener;
+    }
+
+    /**
+     * Construct a {@link com.overturelabs.cannon.toolbox.GenericRequest}.
+     *
+     * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
+     * @param url               Request URL.
+     * @param headers           Headers to be inserted into request header.
+     * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
+     * @param params            Parameters to be inserted into request body.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param successListener   Success {@link com.android.volley.Response.Listener}.
+     * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
+     */
+    public GenericRequest(int method, String url,
+                          final Map<String, String> headers, String oAuth2Token,
+                          final Map<String, String> params,
+                          ResponseParser<T> responseParser,
+                          Response.Listener<T> successListener,
+                          Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
+
+        this.mHeaders = headers;
+        this.mOAuth2Token = oAuth2Token;
+        this.mParams = params;
         this.mResponseParser = responseParser;
         this.mListener = successListener;
     }
@@ -114,16 +189,17 @@ public class GenericRequest<T> extends Request<T> {
 
     @Override
     public Map<String, String> getHeaders() {
-
-        HashMap<String, String> header = new HashMap<String, String>();
+        if (mHeaders == null) {
+            mHeaders = new HashMap<>();
+        }
 
         if (mOAuth2Token != null && mOAuth2Token.length() > 0) {
-            header.put("Authorization", "Bearer " + mOAuth2Token);
+            mHeaders.put("Authorization", "Bearer " + mOAuth2Token);
         }
 
         // Set User Agent header to a special user agent string.
-        header.put("User-Agent", Cannon.getUserAgent());
+        mHeaders.put("User-Agent", Cannon.getUserAgent());
 
-        return header;
+        return mHeaders;
     }
 }
