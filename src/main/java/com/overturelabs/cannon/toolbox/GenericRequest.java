@@ -4,10 +4,17 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.overturelabs.Cannon;
+import com.overturelabs.cannon.toolbox.parsers.ResponseParser;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Generic request class that supports OAuth 2.0 bearer tokens.
+ *
+ * @param <T>   Type of expected response object.
+ * @author      Steve Tan
+ */
 public class GenericRequest<T> extends Request<T> {
     private Map<String, String> mHeaders;
     private Map<String, String> mParams;
@@ -20,7 +27,7 @@ public class GenericRequest<T> extends Request<T> {
      *
      * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param url               Request URL.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
@@ -39,7 +46,7 @@ public class GenericRequest<T> extends Request<T> {
      * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param url               Request URL.
      * @param params            Parameters to be inserted into request body.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
@@ -83,7 +90,7 @@ public class GenericRequest<T> extends Request<T> {
      * @param method            HTTP request method. Refer to {@link com.android.volley.Request.Method}.
      * @param url               Request URL.
      * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */
@@ -105,7 +112,7 @@ public class GenericRequest<T> extends Request<T> {
      * @param url               Request URL.
      * @param headers           Headers to be inserted into request header.
      * @param oAuth2Token       OAuth 2.0 token to be inserted into the request header.
-     * @param responseParser    {@link com.overturelabs.cannon.toolbox.ResponseParser} for parsing response.
+     * @param responseParser    {@link com.overturelabs.cannon.toolbox.parsers.ResponseParser} for parsing response.
      * @param successListener   Success {@link com.android.volley.Response.Listener}.
      * @param errorListener     {@link com.android.volley.Response.ErrorListener}.
      */

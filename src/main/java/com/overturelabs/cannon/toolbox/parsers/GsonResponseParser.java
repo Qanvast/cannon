@@ -1,4 +1,4 @@
-package com.overturelabs.cannon.toolbox;
+package com.overturelabs.cannon.toolbox.parsers;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -7,24 +7,24 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.overturelabs.cannon.toolbox.gson.deserializers.DateDeserializer;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 /**
- * {@link com.overturelabs.cannon.toolbox.ResponseParser} for {@link com.google.gson.Gson} objects.
+ * {@link ResponseParser} for {@link com.google.gson.Gson} objects.
  *
  * @param <T> Expected class of response object.
  * @author Steve Tan
  */
 public class GsonResponseParser<T> implements ResponseParser<T> {
-    private static final String MONGODB_UTC_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
     private Gson mGson;
     private Class<T> mClassOfT;
 
     public GsonResponseParser(Class<T> classOfT) {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat(MONGODB_UTC_FORMAT);
+        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
 
         mGson = gsonBuilder.create();
         mClassOfT = classOfT;

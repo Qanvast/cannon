@@ -1,10 +1,10 @@
-package com.overturelabs.cannon.toolbox;
+package com.overturelabs.cannon.toolbox.parsers;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 
 /**
- * {@link com.overturelabs.cannon.toolbox.ResponseParser} grants users
+ * {@link ResponseParser} grants users
  * the flexibility to parse the response any way they want it.
  */
 public interface ResponseParser<T> {
