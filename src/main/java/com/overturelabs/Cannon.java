@@ -360,13 +360,15 @@ public class Cannon implements CannonAuthenticator {
     
     private static boolean executeRefreshRequestIfNeeded(Request request) {
         if (sAuthTokenType == null || 
-            sRefreshResourcePointCallback == null) return false;
+            sRefreshResourcePointCallback == null) {
+            return false;
+        }
             
         if (sRefreshRequestIsProcessing.get()) {
         // Add to Pending Queue if refresh is processing
             sInstance.sPendingQueue.add(request);
             return true;
-        }
+        }        
         
         long now = new Date().getTime();
         long difference = sAuthTokenExpiry-now;
@@ -431,6 +433,7 @@ public class Cannon implements CannonAuthenticator {
     
     public static void enableRefreshRequest(boolean addPendingQueueRequests) {
         sRefreshRequestIsProcessing.getAndSet(false);
+        
         if (sInstance == null || 
             sInstance.sPendingQueue == null) return;
         
