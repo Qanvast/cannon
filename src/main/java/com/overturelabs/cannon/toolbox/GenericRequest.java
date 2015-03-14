@@ -179,14 +179,7 @@ public class GenericRequest<T> extends Request<T> {
         this.mResponseParser = responseParser;
         this.mListener = successListener;
     }    
-
-    /**
-     * Returns the {@link Priority} of this request; {@link Priority#NORMAL} by default.
-     */
-    public Priority getPriority() {
-        return Priority.IMMEDIATE;
-    }
-
+    
     @Override
     protected Map<String, String> getParams() {
         return mParams;

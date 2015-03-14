@@ -24,9 +24,11 @@ import com.overturelabs.cannon.toolbox.SwissArmyKnife;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -61,7 +63,8 @@ public class Cannon implements CannonAuthenticator {
     private static String sAuthToken;
     private static AuthTokenType sAuthTokenType;
     private static long sAuthTokenExpiry;
-    private static boolean sRefreshRequestIsProcessing = false;
+    private static AtomicBoolean sRefreshRequestIsProcessing = new AtomicBoolean(false);
+    private static Queue<Request> sPendingQueue = new ArrayDeque<>();
     
 
     private Cannon(Context context, String appName) {
@@ -177,7 +180,8 @@ public class Cannon implements CannonAuthenticator {
             if (!result) return false;
             
             if (!(request instanceof RefreshRequest)) {
-                sInstance.executeRefreshRequestIfNeeded();
+                boolean executed = sInstance.executeRefreshRequestIfNeeded(request);
+                if (executed) return true;  // Executed and requests added to pending queue
             }
             return sInstance.sRequestQueue.add(request) != null;
         }
@@ -354,22 +358,27 @@ public class Cannon implements CannonAuthenticator {
         return fire(new RefreshRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
     }
     
-    private static void executeRefreshRequestIfNeeded() {
+    private static boolean executeRefreshRequestIfNeeded(Request request) {
         if (sAuthTokenType == null || 
-            sRefreshResourcePointCallback == null || 
-            sRefreshRequestIsProcessing) return;
+            sRefreshResourcePointCallback == null) {
+            return false;
+        }
+            
+        if (sRefreshRequestIsProcessing.get()) {
+        // Add to Pending Queue if refresh is processing
+            sInstance.sPendingQueue.add(request);
+            return true;
+        }        
         
         long now = new Date().getTime();
         long difference = sAuthTokenExpiry-now;
         if (difference <= REFRESH_LIMIT) {
             sRefreshResourcePointCallback.execute();
-            sRefreshRequestIsProcessing = true;
-            // Sleep???
-            try {
-                Thread.sleep(1000);
-            } catch(Exception e) {
-            }
+            sRefreshRequestIsProcessing.getAndSet(true);
+            sInstance.sPendingQueue.add(request);
+            return true;
         }
+        return false;
     }
     
     public static String getAuthToken() {
@@ -422,8 +431,20 @@ public class Cannon implements CannonAuthenticator {
         sRefreshResourcePointCallback = refreshResourcePointCallback;
     }
     
-    public static void enableRefreshRequest() {
-        sRefreshRequestIsProcessing = false;
+    public static void enableRefreshRequest(boolean addPendingQueueRequests) {
+        sRefreshRequestIsProcessing.getAndSet(false);
+        
+        if (sInstance == null || 
+            sInstance.sPendingQueue == null) return;
+        
+        if (addPendingQueueRequests) {            
+            while (!sInstance.sPendingQueue.isEmpty()) { 
+                Request request = sInstance.sPendingQueue.poll();
+                sInstance.sRequestQueue.add(request);
+            }
+        } else {
+            sInstance.sPendingQueue.clear();
+        }
     }
 
     public static String getUserAgent() {
