@@ -40,7 +40,7 @@ public class RefreshRequest<T> extends GenericRequest<T> {
     @Override
     protected void deliverResponse(T response) {
         super.deliverResponse(response);
-        Cannon.enableRefreshRequest();
+        Cannon.enableRefreshRequest(true);
     }
     
     /**
@@ -48,13 +48,18 @@ public class RefreshRequest<T> extends GenericRequest<T> {
     */
     @Override
     public void deliverError(VolleyError error) {
-        // Refresh Token Expired
         if (error.networkResponse != null) {
             if (error.networkResponse.statusCode != 0) {
+            // Refresh Token Expired
                 Cannon.invalidateAuthToken();
+                Cannon.enableRefreshRequest(false);
+            } else {
+                Cannon.enableRefreshRequest(true);
             }
+        } else {
+        // No/Limited Connectivity Error
+            Cannon.enableRefreshRequest(true);
         }
         super.deliverError(error);
-        Cannon.enableRefreshRequest();
     }
 }
