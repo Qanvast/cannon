@@ -15,13 +15,16 @@ import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.overturelabs.cannon.BitmapLruCache;
 import com.overturelabs.cannon.OkHttpStack;
+import com.overturelabs.cannon.toolbox.CannonAuthenticator;
 import com.overturelabs.cannon.toolbox.GenericRequest;
 import com.overturelabs.cannon.toolbox.MultipartRequest;
+import com.overturelabs.cannon.toolbox.RefreshRequest;
 import com.overturelabs.cannon.toolbox.ResourcePoint;
 import com.overturelabs.cannon.toolbox.SwissArmyKnife;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,7 +34,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Steve Tan
  */
-public class Cannon {
+public class Cannon implements CannonAuthenticator {
+    public interface RefreshResourcePointCallback {
+        public void execute();
+    }
+    
     public static final String TAG = "Cannon";
 
     private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
@@ -48,6 +55,14 @@ public class Cannon {
 
     private static RequestQueue sRequestQueue;
     private static ImageLoader sImageLoader;
+    
+    private static final long REFRESH_LIMIT = 1000 * 20;//20 secs //60 * 5; // 5 minutes earlier
+    private static RefreshResourcePointCallback sRefreshResourcePointCallback;
+    private static String sAuthToken;
+    private static AuthTokenType sAuthTokenType;
+    private static long sAuthTokenExpiry;
+    private static boolean sRefreshRequestIsProcessing = false;
+    
 
     private Cannon(Context context, String appName) {
         try {
@@ -115,6 +130,8 @@ public class Cannon {
                 // Not loaded!
                 if (sInstance == null) {
                     sInstance = new Cannon(context, appName);
+                    sInstance.invalidateAuthToken();
+                    sInstance.sRefreshResourcePointCallback = null;
                     SAFETY_SWITCH.set(false);
                 }
             }
@@ -155,9 +172,14 @@ public class Cannon {
             // Alas, my captain! The cannon is not loaded!
             throw new NotLoadedException();
         } else {
-            return SwissArmyKnife.isAppConnectedToNetwork(sApplicationContext)
-                    && sInstance != null && sInstance.sRequestQueue != null
-                    && sInstance.sRequestQueue.add(request) != null;
+            boolean result = SwissArmyKnife.isAppConnectedToNetwork(sApplicationContext)
+                    && sInstance != null && sInstance.sRequestQueue != null;
+            if (!result) return false;
+            
+            if (!(request instanceof RefreshRequest)) {
+                sInstance.executeRefreshRequestIfNeeded();
+            }
+            return sInstance.sRequestQueue.add(request) != null;
         }
     }
 
@@ -305,6 +327,103 @@ public class Cannon {
         }
 
         return fire(new MultipartRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, files, resourcePoint.getResponseParser(), successListener, errorListener));
+    }
+    
+    public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, 
+                                     int method,
+                                     final Map<String, String> resourcePathParams,
+                                     final Map<String, String> requestHeaders,
+                                     final Map<String, String> requestParams,
+                                     String encoding,
+                                     String oAuth2Token,
+                                     Response.Listener<T> successListener,
+                                     Response.ErrorListener errorListener,
+                                     boolean isRefreshRequest)
+            throws NotLoadedException, UnsupportedEncodingException {
+        ResourcePoint<T> resourcePoint = (ResourcePoint<T>) sResourcePoints.get(classOfResourcePoint);
+
+        String url;
+        
+        if (encoding == null) encoding = DEFAULT_PARAMS_ENCODING;
+        if (method == Request.Method.GET) {
+            url = resourcePoint.getUrl(resourcePathParams, requestParams, encoding);
+        } else {
+            url = resourcePoint.getUrl(resourcePathParams, encoding);
+        }
+
+        return fire(new RefreshRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
+    }
+    
+    private static void executeRefreshRequestIfNeeded() {
+        if (sAuthTokenType == null || 
+            sRefreshResourcePointCallback == null || 
+            sRefreshRequestIsProcessing) return;
+        
+        long now = new Date().getTime();
+        long difference = sAuthTokenExpiry-now;
+        if (difference <= REFRESH_LIMIT) {
+            sRefreshResourcePointCallback.execute();
+            sRefreshRequestIsProcessing = true;
+            // Sleep???
+            try {
+                Thread.sleep(1000);
+            } catch(Exception e) {
+            }
+        }
+    }
+    
+    public static String getAuthToken() {
+        return sAuthToken;
+    }
+    
+    public void setAuthToken(String authToken) {
+        sAuthToken = authToken;
+    }
+    
+    public static AuthTokenType getAuthTokenType() {
+        return sAuthTokenType;
+    }
+    
+    public void setAuthTokenType(AuthTokenType authTokenType) {
+        sAuthTokenType = authTokenType;
+    }
+    
+    public static long getAuthTokenExpiry() {
+        return sAuthTokenExpiry;
+    }
+    
+    public void setAuthTokenExpiry(long authTokenExpiry) {
+        sAuthTokenExpiry = authTokenExpiry;
+    }
+    
+    public static void invalidateAuthToken() {
+        if (sInstance == null) return;
+        
+        sAuthToken = null;
+        sAuthTokenType = null;
+        sAuthTokenExpiry = 0l;
+    }
+    
+    public static void setAuthTokens(String authToken, 
+                                     AuthTokenType authTokenType, 
+                                     long authTokenExpiry) {        
+        sAuthToken = authToken;
+        sAuthTokenType = authTokenType;
+        sAuthTokenExpiry = authTokenExpiry;
+    }
+    
+    public static void setAuthTokens(String authToken, 
+                                     AuthTokenType authTokenType, 
+                                     long authTokenExpiry,
+                                     RefreshResourcePointCallback refreshResourcePointCallback) {        
+        setAuthTokens(authToken, authTokenType, authTokenExpiry);
+        
+        sRefreshResourcePointCallback = null;
+        sRefreshResourcePointCallback = refreshResourcePointCallback;
+    }
+    
+    public static void enableRefreshRequest() {
+        sRefreshRequestIsProcessing = false;
     }
 
     public static String getUserAgent() {

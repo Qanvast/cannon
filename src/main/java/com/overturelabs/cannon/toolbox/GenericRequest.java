@@ -4,6 +4,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.overturelabs.Cannon;
+import com.overturelabs.cannon.toolbox.CannonAuthenticator;
 import com.overturelabs.cannon.toolbox.parsers.ResponseParser;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.Map;
 public class GenericRequest<T> extends Request<T> {
     private Map<String, String> mHeaders;
     private Map<String, String> mParams;
-    private String mOAuth2Token = null;
+    // private String mOAuth2Token = null;
     private ResponseParser<T> mResponseParser;
     private Response.Listener<T> mListener;
 
@@ -100,7 +101,7 @@ public class GenericRequest<T> extends Request<T> {
                           Response.ErrorListener errorListener) {
         super(method, url, errorListener);
 
-        this.mOAuth2Token = oAuth2Token;
+        // this.mOAuth2Token = oAuth2Token;
         this.mResponseParser = responseParser;
         this.mListener = successListener;
     }
@@ -124,7 +125,7 @@ public class GenericRequest<T> extends Request<T> {
         super(method, url, errorListener);
 
         this.mHeaders = headers;
-        this.mOAuth2Token = oAuth2Token;
+        // this.mOAuth2Token = oAuth2Token;
         this.mResponseParser = responseParser;
         this.mListener = successListener;
     }
@@ -146,7 +147,7 @@ public class GenericRequest<T> extends Request<T> {
                           Response.ErrorListener errorListener) {
         super(method, url, errorListener);
 
-        this.mOAuth2Token = oAuth2Token;
+        // this.mOAuth2Token = oAuth2Token;
         this.mParams = params;
         this.mResponseParser = responseParser;
         this.mListener = successListener;
@@ -173,10 +174,17 @@ public class GenericRequest<T> extends Request<T> {
         super(method, url, errorListener);
 
         this.mHeaders = headers;
-        this.mOAuth2Token = oAuth2Token;
+        // this.mOAuth2Token = oAuth2Token;
         this.mParams = params;
         this.mResponseParser = responseParser;
         this.mListener = successListener;
+    }    
+
+    /**
+     * Returns the {@link Priority} of this request; {@link Priority#NORMAL} by default.
+     */
+    public Priority getPriority() {
+        return Priority.IMMEDIATE;
     }
 
     @Override
@@ -200,8 +208,15 @@ public class GenericRequest<T> extends Request<T> {
             mHeaders = new HashMap<>();
         }
 
-        if (mOAuth2Token != null && mOAuth2Token.length() > 0) {
-            mHeaders.put("Authorization", "Bearer " + mOAuth2Token);
+        String authToken = Cannon.getAuthToken();
+        CannonAuthenticator.AuthTokenType authTokenType = Cannon.getAuthTokenType();
+        if (authToken != null && 
+            authToken.length() > 0) {
+            switch (authTokenType) {
+                case OAUTH2:
+                    mHeaders.put("Authorization", "Bearer " + authToken);
+                    break;
+            }
         }
 
         // Set User Agent header to a special user agent string.
