@@ -58,7 +58,7 @@ public class Cannon implements CannonAuthenticator {
     private static RequestQueue sRequestQueue;
     private static ImageLoader sImageLoader;
     
-    private static final long REFRESH_LIMIT = 1000 * 20;//20 secs //60 * 5; // 5 minutes earlier
+    private static final long REFRESH_LIMIT = 1000 * 60 * 5; // 5 minutes earlier
     private static RefreshResourcePointCallback sRefreshResourcePointCallback;
     private static String sAuthToken;
     private static AuthTokenType sAuthTokenType;
