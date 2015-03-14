@@ -44,13 +44,14 @@ public class ExampleRefreshResourcePoint extends ResourcePoint<ModelObject> {
      * POST
      * ========================================
      */
-
     public static boolean post(final Map<String, String> resourcePathParams,
+                               final Map<String, String> requestHeaders,
                                final Map<String, String> requestParams,
+                               String encoding,
                                String oAuth2Token,
                                Response.Listener<ModelObject> successListener,
                                Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(ExampleRefreshResourcePoint.class, Request.Method.POST, resourcePathParams, null, requestParams, null, oAuth2Token, successListener, errorListener, true);
+        return Cannon.fireAt(ExampleRefreshResourcePoint.class, Request.Method.POST, resourcePathParams, requestHeaders, requestParams, encoding, oAuth2Token, successListener, errorListener, true);
     }
 
     public static boolean post(final Map<String, String> resourcePathParams,
@@ -60,15 +61,5 @@ public class ExampleRefreshResourcePoint extends ResourcePoint<ModelObject> {
                                Response.Listener<ModelObject> successListener,
                                Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
         return Cannon.fireAt(ExampleRefreshResourcePoint.class, Request.Method.POST, resourcePathParams, requestHeaders, requestParams, null, oAuth2Token, successListener, errorListener, true);
-    }
-    
-    public static boolean post(final Map<String, String> resourcePathParams,
-                               final Map<String, String> requestHeaders,
-                               final Map<String, String> requestParams,
-                               String encoding,
-                               String oAuth2Token,
-                               Response.Listener<ModelObject> successListener,
-                               Response.ErrorListener errorListener) throws Cannon.NotLoadedException, UnsupportedEncodingException {
-        return Cannon.fireAt(ExampleRefreshResourcePoint.class, Request.Method.POST, resourcePathParams, requestHeaders, requestParams, encoding, oAuth2Token, successListener, errorListener, true);
     }
 }

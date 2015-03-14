@@ -36,6 +36,12 @@ public class RefreshRequest<T> extends GenericRequest<T> {
     public Priority getPriority() {
         return Priority.IMMEDIATE;
     }
+
+    @Override
+    protected void deliverResponse(T response) {
+        super.deliverResponse(response);
+        Cannon.enableRefreshRequest();
+    }
     
     /**
     * Clears Cannon's Auth Token if Refresh Token has Expired
@@ -49,5 +55,6 @@ public class RefreshRequest<T> extends GenericRequest<T> {
             }
         }
         super.deliverError(error);
+        Cannon.enableRefreshRequest();
     }
 }

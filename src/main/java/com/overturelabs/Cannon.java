@@ -56,11 +56,12 @@ public class Cannon implements CannonAuthenticator {
     private static RequestQueue sRequestQueue;
     private static ImageLoader sImageLoader;
     
-    private static final long REFRESH_LIMIT = 1000 * 20; //20 secs// * 5; // 5 minutes earlier
+    private static final long REFRESH_LIMIT = 1000 * 20;//20 secs //60 * 5; // 5 minutes earlier
     private static RefreshResourcePointCallback sRefreshResourcePointCallback;
     private static String sAuthToken;
     private static AuthTokenType sAuthTokenType;
     private static long sAuthTokenExpiry;
+    private static boolean sRefreshRequestIsProcessing = false;
     
 
     private Cannon(Context context, String appName) {
@@ -354,13 +355,20 @@ public class Cannon implements CannonAuthenticator {
     }
     
     private static void executeRefreshRequestIfNeeded() {
-        if (sAuthTokenType == null || sRefreshResourcePointCallback == null) return;
+        if (sAuthTokenType == null || 
+            sRefreshResourcePointCallback == null || 
+            sRefreshRequestIsProcessing) return;
         
         long now = new Date().getTime();
         long difference = sAuthTokenExpiry-now;
         if (difference <= REFRESH_LIMIT) {
             sRefreshResourcePointCallback.execute();
+            sRefreshRequestIsProcessing = true;
             // Sleep???
+            try {
+                Thread.sleep(1000);
+            } catch(Exception e) {
+            }
         }
     }
     
@@ -412,6 +420,10 @@ public class Cannon implements CannonAuthenticator {
         
         sRefreshResourcePointCallback = null;
         sRefreshResourcePointCallback = refreshResourcePointCallback;
+    }
+    
+    public static void enableRefreshRequest() {
+        sRefreshRequestIsProcessing = false;
     }
 
     public static String getUserAgent() {
