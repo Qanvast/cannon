@@ -180,12 +180,8 @@ public class Cannon implements CannonAuthenticator {
             if (!result) return false;
             
             if (!(request instanceof RefreshRequest)) {
-                sInstance.executeRefreshRequestIfNeeded();
-              // Add request to pending queue if refresh request is processing
-                if (sInstance.sRefreshRequestIsProcessing.get()) {
-                    sInstance.sPendingQueue.add(request);
-                    return true;
-                }
+                boolean executed = sInstance.executeRefreshRequestIfNeeded(request);
+                if (executed) return true;  // Executed and requests added to pending queue
             }
             return sInstance.sRequestQueue.add(request) != null;
         }
@@ -362,17 +358,25 @@ public class Cannon implements CannonAuthenticator {
         return fire(new RefreshRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
     }
     
-    private static void executeRefreshRequestIfNeeded() {
+    private static boolean executeRefreshRequestIfNeeded(Request request) {
         if (sAuthTokenType == null || 
-            sRefreshResourcePointCallback == null || 
-            sRefreshRequestIsProcessing.get()) return;
+            sRefreshResourcePointCallback == null) return false;
+            
+        if (sRefreshRequestIsProcessing.get()) {
+        // Add to Pending Queue if refresh is processing
+            sInstance.sPendingQueue.add(request);
+            return true;
+        }
         
         long now = new Date().getTime();
         long difference = sAuthTokenExpiry-now;
         if (difference <= REFRESH_LIMIT) {
             sRefreshResourcePointCallback.execute();
             sRefreshRequestIsProcessing.getAndSet(true);
+            sInstance.sPendingQueue.add(request);
+            return true;
         }
+        return false;
     }
     
     public static String getAuthToken() {
@@ -425,12 +429,12 @@ public class Cannon implements CannonAuthenticator {
         sRefreshResourcePointCallback = refreshResourcePointCallback;
     }
     
-    public static void enableRefreshRequest(boolean addPendingQueue) {
+    public static void enableRefreshRequest(boolean addPendingQueueRequests) {
         sRefreshRequestIsProcessing.getAndSet(false);
         if (sInstance == null || 
             sInstance.sPendingQueue == null) return;
         
-        if (addPendingQueue) {            
+        if (addPendingQueueRequests) {            
             while (!sInstance.sPendingQueue.isEmpty()) { 
                 Request request = sInstance.sPendingQueue.poll();
                 sInstance.sRequestQueue.add(request);
