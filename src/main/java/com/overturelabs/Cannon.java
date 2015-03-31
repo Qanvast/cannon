@@ -133,8 +133,8 @@ public class Cannon implements CannonAuthenticator {
                 // Not loaded!
                 if (sInstance == null) {
                     sInstance = new Cannon(context, appName);
-                    sInstance.invalidateAuthToken();
-                    sInstance.sRefreshResourcePointCallback = null;
+                    invalidateAuthToken();
+                    sRefreshResourcePointCallback = null;
                     SAFETY_SWITCH.set(false);
                 }
             }
@@ -176,14 +176,14 @@ public class Cannon implements CannonAuthenticator {
             throw new NotLoadedException();
         } else {
             boolean result = SwissArmyKnife.isAppConnectedToNetwork(sApplicationContext)
-                    && sInstance != null && sInstance.sRequestQueue != null;
+                    && sInstance != null && sRequestQueue != null;
             if (!result) return false;
             
             if (!(request instanceof RefreshRequest)) {
-                boolean executed = sInstance.executeRefreshRequestIfNeeded(request);
+                boolean executed = executeRefreshRequestIfNeeded(request);
                 if (executed) return true;  // Executed and requests added to pending queue
             }
-            return sInstance.sRequestQueue.add(request) != null;
+            return sRequestQueue.add(request) != null;
         }
     }
 
@@ -366,7 +366,7 @@ public class Cannon implements CannonAuthenticator {
             
         if (sRefreshRequestIsProcessing.get()) {
         // Add to Pending Queue if refresh is processing
-            sInstance.sPendingQueue.add(request);
+            sPendingQueue.add(request);
             return true;
         }        
         
@@ -375,7 +375,7 @@ public class Cannon implements CannonAuthenticator {
         if (difference <= REFRESH_LIMIT) {
             sRefreshResourcePointCallback.execute();
             sRefreshRequestIsProcessing.getAndSet(true);
-            sInstance.sPendingQueue.add(request);
+            sPendingQueue.add(request);
             return true;
         }
         return false;
@@ -435,15 +435,15 @@ public class Cannon implements CannonAuthenticator {
         sRefreshRequestIsProcessing.getAndSet(false);
         
         if (sInstance == null || 
-            sInstance.sPendingQueue == null) return;
+            sPendingQueue == null) return;
         
         if (addPendingQueueRequests) {            
-            while (!sInstance.sPendingQueue.isEmpty()) { 
-                Request request = sInstance.sPendingQueue.poll();
-                sInstance.sRequestQueue.add(request);
+            while (!sPendingQueue.isEmpty()) {
+                Request request = sPendingQueue.poll();
+                sRequestQueue.add(request);
             }
         } else {
-            sInstance.sPendingQueue.clear();
+            sPendingQueue.clear();
         }
     }
 
