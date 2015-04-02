@@ -134,7 +134,6 @@ public class Cannon implements CannonAuthenticator {
                 if (sInstance == null) {
                     sInstance = new Cannon(context, appName);
                     invalidateAuthToken();
-                    sRefreshResourcePointCallback = null;
                     SAFETY_SWITCH.set(false);
                 }
             }
@@ -411,6 +410,7 @@ public class Cannon implements CannonAuthenticator {
         sAuthToken = null;
         sAuthTokenType = null;
         sAuthTokenExpiry = 0l;
+        sRefreshResourcePointCallback = null;
     }
     
     public static void setAuthTokens(String authToken, 
@@ -445,6 +445,10 @@ public class Cannon implements CannonAuthenticator {
         } else {
             sPendingQueue.clear();
         }
+    }
+
+    public static boolean isRefreshResoucePointCallbackSet() {
+        return sRefreshResourcePointCallback != null;
     }
 
     public static String getUserAgent() {
