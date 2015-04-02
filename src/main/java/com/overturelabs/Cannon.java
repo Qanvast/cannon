@@ -9,13 +9,13 @@ import android.util.Pair;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.overturelabs.cannon.BitmapLruCache;
 import com.overturelabs.cannon.OkHttpStack;
+import com.overturelabs.cannon.toolbox.BasicNetworkOOM;
 import com.overturelabs.cannon.toolbox.CannonAuthenticator;
+import com.overturelabs.cannon.toolbox.DiskBasedCacheOOM;
 import com.overturelabs.cannon.toolbox.GenericRequest;
 import com.overturelabs.cannon.toolbox.MultipartRequest;
 import com.overturelabs.cannon.toolbox.RefreshRequest;
@@ -93,12 +93,12 @@ public class Cannon implements CannonAuthenticator {
             File cacheDir = new File(sApplicationContext.getCacheDir(), DISK_CACHE_NAME);
 
             // Create a DiskBasedCache of 300 MiB
-            DiskBasedCache diskBasedCache
-                    = new DiskBasedCache(cacheDir, DISK_CACHE_MEMORY_ALLOCATION * 1024 * 1024);
+            DiskBasedCacheOOM diskBasedCache
+                    = new DiskBasedCacheOOM(cacheDir, DISK_CACHE_MEMORY_ALLOCATION * 1024 * 1024);
 
             HttpStack httpStack = new OkHttpStack();
 
-            sRequestQueue = new RequestQueue(diskBasedCache, new BasicNetwork(httpStack));
+            sRequestQueue = new RequestQueue(diskBasedCache, new BasicNetworkOOM(httpStack));
             sRequestQueue.start();
 
             sImageLoader = new ImageLoader(sRequestQueue, new BitmapLruCache());
