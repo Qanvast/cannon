@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Cannon implements CannonAuthenticator {
     public interface RefreshResourcePointCallback {
-        public void execute();
+        void execute();
     }
     
     public static final String TAG = "Cannon";

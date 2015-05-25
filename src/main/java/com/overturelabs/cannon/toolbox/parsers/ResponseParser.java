@@ -9,5 +9,5 @@ import com.android.volley.Response;
  */
 public interface ResponseParser<T> {
 
-    public Response<T> parseNetworkResponse(NetworkResponse response);
+    Response<T> parseNetworkResponse(NetworkResponse response);
 }
