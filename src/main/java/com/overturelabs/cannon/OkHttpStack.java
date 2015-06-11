@@ -58,6 +58,7 @@ import java.util.concurrent.TimeUnit;
  * OkHttp backed {@link com.android.volley.toolbox.HttpStack HttpStack} that does not
  * use okhttp-urlconnection
  */
+@SuppressWarnings("deprecation")
 public class OkHttpStack implements HttpStack {
 
     private final OkHttpClient mClient;
@@ -126,7 +127,6 @@ public class OkHttpStack implements HttpStack {
         return entity;
     }
 
-    @SuppressWarnings("deprecation")
     private static void setConnectionParametersForRequest(com.squareup.okhttp.Request.Builder builder, Request<?> request)
             throws IOException, AuthFailureError {
         switch (request.getMethod()) {
@@ -183,7 +183,9 @@ public class OkHttpStack implements HttpStack {
 
     private static RequestBody createRequestBody(Request r) throws AuthFailureError {
         final byte[] body = r.getBody();
-        if (body == null) return null;
+        if (body == null) {
+            return RequestBody.create(MediaType.parse("text/plain"), "");
+        }
 
         return RequestBody.create(MediaType.parse(r.getBodyContentType()), body);
     }
