@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Pair;
 
 import com.android.volley.Request;
@@ -24,8 +25,6 @@ import com.overturelabs.cannon.toolbox.SwissArmyKnife;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayDeque;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -36,10 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Steve Tan
  */
-public class Cannon implements CannonAuthenticator {
-    public interface RefreshResourcePointCallback {
-        void execute();
-    }
+public class Cannon {
     
     public static final String TAG = "Cannon";
 
@@ -57,14 +53,8 @@ public class Cannon implements CannonAuthenticator {
 
     private static RequestQueue sRequestQueue;
     private static ImageLoader sImageLoader;
-    
-    private static final long REFRESH_LIMIT = 1000 * 60 * 5; // 5 minutes earlier
-    private static RefreshResourcePointCallback sRefreshResourcePointCallback;
-    private static String sAuthToken;
-    private static AuthTokenType sAuthTokenType;
-    private static long sAuthTokenExpiry;
-    private static AtomicBoolean sRefreshRequestIsProcessing = new AtomicBoolean(false);
-    private static Queue<Request> sPendingQueue = new ArrayDeque<>();
+
+    private static Boolean sCannonAuthenticatorEnabled;
     
 
     private Cannon(Context context, String appName) {
@@ -88,16 +78,20 @@ public class Cannon implements CannonAuthenticator {
             synchronized (SAFETY_SWITCH) {
                 sUserAgent = appName + '/' + appVersion + " (" + Build.MANUFACTURER + " " + Build.MODEL + " " + Build.DEVICE + "; " + Build.VERSION.RELEASE + "; )";
             }
-
             // Based on com.android.volley.toolbox.Volley.java newRequestQueue method.
-            File cacheDir = new File(sApplicationContext.getCacheDir(), DISK_CACHE_NAME);
+
+            final File cacheDir;
+            if (Environment.isExternalStorageEmulated()) {
+                cacheDir = new File(sApplicationContext.getExternalCacheDir(), DISK_CACHE_NAME);
+            }
+            else {
+                cacheDir = new File(sApplicationContext.getCacheDir(), DISK_CACHE_NAME);
+            }
 
             // Create a DiskBasedCache of 300 MiB
             DiskBasedCacheOOM diskBasedCache
                     = new DiskBasedCacheOOM(cacheDir, DISK_CACHE_MEMORY_ALLOCATION * 1024 * 1024);
-
             HttpStack httpStack = new OkHttpStack();
-
             sRequestQueue = new RequestQueue(diskBasedCache, new BasicNetworkOOM(httpStack));
             sRequestQueue.start();
 
@@ -133,7 +127,7 @@ public class Cannon implements CannonAuthenticator {
                 // Not loaded!
                 if (sInstance == null) {
                     sInstance = new Cannon(context, appName);
-                    invalidateAuthToken();
+                    sCannonAuthenticatorEnabled = false;
                     SAFETY_SWITCH.set(false);
                 }
             }
@@ -177,12 +171,16 @@ public class Cannon implements CannonAuthenticator {
             boolean result = SwissArmyKnife.isAppConnectedToNetwork(sApplicationContext)
                     && sInstance != null && sRequestQueue != null;
             if (!result) return false;
-            
-            if (!(request instanceof RefreshRequest)) {
-                boolean executed = executeRefreshRequestIfNeeded(request);
-                if (executed) return true;  // Executed and requests added to pending queue
+
+            if (sCannonAuthenticatorEnabled &&
+                    !(request instanceof RefreshRequest) &&
+                    CannonAuthenticator
+                        .getInstance()
+                        .didRefreshRequestExecute(request)) {
+                return true;
+            } else {
+                return sRequestQueue.add(request) != null;
             }
-            return sRequestQueue.add(request) != null;
         }
     }
 
@@ -331,17 +329,18 @@ public class Cannon implements CannonAuthenticator {
 
         return fire(new MultipartRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, files, resourcePoint.getResponseParser(), successListener, errorListener));
     }
-    
-    public static <T> boolean fireAt(Class<? extends ResourcePoint<T>> classOfResourcePoint, 
+
+    /**
+     * To fire a refresh request
+     */
+    public static <T> boolean fireRefreshRequest(Class<? extends ResourcePoint<T>> classOfResourcePoint,
                                      int method,
                                      final Map<String, String> resourcePathParams,
                                      final Map<String, String> requestHeaders,
                                      final Map<String, String> requestParams,
                                      String encoding,
-                                     String oAuth2Token,
                                      Response.Listener<T> successListener,
-                                     Response.ErrorListener errorListener,
-                                     boolean isRefreshRequest)
+                                     Response.ErrorListener errorListener)
             throws NotLoadedException, UnsupportedEncodingException {
         ResourcePoint<T> resourcePoint = (ResourcePoint<T>) sResourcePoints.get(classOfResourcePoint);
 
@@ -354,101 +353,7 @@ public class Cannon implements CannonAuthenticator {
             url = resourcePoint.getUrl(resourcePathParams, encoding);
         }
 
-        return fire(new RefreshRequest<>(method, url, requestHeaders, oAuth2Token, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
-    }
-    
-    private static boolean executeRefreshRequestIfNeeded(Request request) {
-        if (sAuthTokenType == null || 
-            sRefreshResourcePointCallback == null) {
-            return false;
-        }
-            
-        if (sRefreshRequestIsProcessing.get()) {
-        // Add to Pending Queue if refresh is processing
-            sPendingQueue.add(request);
-            return true;
-        }        
-        
-        long now = new Date().getTime();
-        long difference = sAuthTokenExpiry-now;
-        if (difference <= REFRESH_LIMIT) {
-            sRefreshResourcePointCallback.execute();
-            sRefreshRequestIsProcessing.getAndSet(true);
-            sPendingQueue.add(request);
-            return true;
-        }
-        return false;
-    }
-    
-    public static String getAuthToken() {
-        return sAuthToken;
-    }
-    
-    public void setAuthToken(String authToken) {
-        sAuthToken = authToken;
-    }
-    
-    public static AuthTokenType getAuthTokenType() {
-        return sAuthTokenType;
-    }
-    
-    public void setAuthTokenType(AuthTokenType authTokenType) {
-        sAuthTokenType = authTokenType;
-    }
-    
-    public static long getAuthTokenExpiry() {
-        return sAuthTokenExpiry;
-    }
-    
-    public void setAuthTokenExpiry(long authTokenExpiry) {
-        sAuthTokenExpiry = authTokenExpiry;
-    }
-    
-    public static void invalidateAuthToken() {
-        if (sInstance == null) return;
-        
-        sAuthToken = null;
-        sAuthTokenType = null;
-        sAuthTokenExpiry = 0l;
-        sRefreshResourcePointCallback = null;
-    }
-    
-    public static void setAuthTokens(String authToken, 
-                                     AuthTokenType authTokenType, 
-                                     long authTokenExpiry) {        
-        sAuthToken = authToken;
-        sAuthTokenType = authTokenType;
-        sAuthTokenExpiry = authTokenExpiry;
-    }
-    
-    public static void setAuthTokens(String authToken, 
-                                     AuthTokenType authTokenType, 
-                                     long authTokenExpiry,
-                                     RefreshResourcePointCallback refreshResourcePointCallback) {        
-        setAuthTokens(authToken, authTokenType, authTokenExpiry);
-        
-        sRefreshResourcePointCallback = null;
-        sRefreshResourcePointCallback = refreshResourcePointCallback;
-    }
-    
-    public static void enableRefreshRequest(boolean addPendingQueueRequests) {
-        sRefreshRequestIsProcessing.getAndSet(false);
-        
-        if (sInstance == null || 
-            sPendingQueue == null) return;
-        
-        if (addPendingQueueRequests) {            
-            while (!sPendingQueue.isEmpty()) {
-                Request request = sPendingQueue.poll();
-                sRequestQueue.add(request);
-            }
-        } else {
-            sPendingQueue.clear();
-        }
-    }
-
-    public static boolean isRefreshResoucePointCallbackSet() {
-        return sRefreshResourcePointCallback != null;
+        return fire(new RefreshRequest<>(method, url, requestHeaders, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
     }
 
     public static String getUserAgent() {
@@ -457,6 +362,53 @@ public class Cannon implements CannonAuthenticator {
         // not in the midst of a write cycle.
         synchronized (SAFETY_SWITCH) {
             return sUserAgent;
+        }
+    }
+
+    /**
+     * Enables Cannon Authenticator Manager to facilitate OAUTH2 Refresh Requests
+     * @param authToken
+     * @param authTokenType
+     * @param authTokenExpiry
+     * @param callback
+     */
+    public static void enableAuthenticator(String authToken,
+                                           CannonAuthenticator.AuthTokenType authTokenType,
+                                           long authTokenExpiry,
+                                           CannonAuthenticator.RefreshResourcePointCallback callback) {
+        sCannonAuthenticatorEnabled = true;
+
+        CannonAuthenticator
+                .getInstance()
+                .set(authToken, authTokenType, authTokenExpiry)
+                .setRefreshResourcePointCallback(callback);
+    }
+
+    /**
+     *
+     * Disables Cannon Authenticator Manager
+     *
+     */
+    public static void disableAuthenticator() {
+        sCannonAuthenticatorEnabled = false;
+
+        CannonAuthenticator
+                .getInstance()
+                .invalidate();
+    }
+
+    public static boolean isAuthenticatorEnabled() {
+        return sCannonAuthenticatorEnabled;
+    }
+
+    /**
+     * Adds a queue of requests to the processing/network queue
+     * @param requests
+     */
+    public static void addRequestQueue(Queue<Request> requests) {
+        while (!requests.isEmpty()) {
+            Request request = requests.poll();
+            sRequestQueue.add(request);
         }
     }
 

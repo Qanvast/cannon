@@ -22,8 +22,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * Old Source: https://gist.github.com/JakeWharton/5616899
- * New Source for OkHttp2.3.0: https://gist.github.com/bryanstern/4e8f1cb5a8e14c202750
+ * @see <a href="https://gist.github.com/JakeWharton/5616899">Version 1.0 by Jake Wharton</a>
+ * @see <a href="https://gist.github.com/bryanstern/4e8f1cb5a8e14c202750">Version 2.0 for OkHttp2.3.0 by bryanstern</a>
  * Last Updated: March 31st 2015
  */
 

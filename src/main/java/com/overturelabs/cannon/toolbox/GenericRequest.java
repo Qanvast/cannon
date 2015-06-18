@@ -201,14 +201,23 @@ public class GenericRequest<T> extends Request<T> {
             mHeaders = new HashMap<>();
         }
 
-        String authToken = Cannon.getAuthToken();
-        CannonAuthenticator.AuthTokenType authTokenType = Cannon.getAuthTokenType();
-        if (authToken != null && 
-            authToken.length() > 0) {
-            switch (authTokenType) {
-                case OAUTH2:
-                    mHeaders.put("Authorization", "Bearer " + authToken);
-                    break;
+        /**
+         * Only if Authenticator is enabled
+         * Attaches authentication token to the header
+         * Currently only supports OAUTH2.
+         */
+        if (Cannon.isAuthenticatorEnabled()) {
+            final CannonAuthenticator authenticator = CannonAuthenticator.getInstance();
+            final String authToken = authenticator.getAuthToken();
+            final CannonAuthenticator.AuthTokenType authTokenType = authenticator.getAuthTokenType();
+
+            if (authToken != null &&
+                    authToken.length() > 0) {
+                switch (authTokenType) {
+                    case OAUTH2:
+                        mHeaders.put("Authorization", "Bearer " + authToken);
+                        break;
+                }
             }
         }
 
