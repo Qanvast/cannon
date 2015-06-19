@@ -81,16 +81,19 @@ public class Cannon {
             // Based on com.android.volley.toolbox.Volley.java newRequestQueue method.
 
             final File cacheDir;
+            final int MULTIPLIER;
             if (Environment.isExternalStorageEmulated()) {
                 cacheDir = new File(sApplicationContext.getExternalCacheDir(), DISK_CACHE_NAME);
+                MULTIPLIER = 2;
             }
             else {
                 cacheDir = new File(sApplicationContext.getCacheDir(), DISK_CACHE_NAME);
+                MULTIPLIER = 1;
             }
 
-            // Create a DiskBasedCache of 300 MiB
+            // Create a DiskBasedCache of 300 MiB for internal storage, 300MiB*2=600MiB for external storage
             DiskBasedCacheOOM diskBasedCache
-                    = new DiskBasedCacheOOM(cacheDir, DISK_CACHE_MEMORY_ALLOCATION * 1024 * 1024);
+                    = new DiskBasedCacheOOM(cacheDir, MULTIPLIER * DISK_CACHE_MEMORY_ALLOCATION * 1024 * 1024);
             HttpStack httpStack = new OkHttpStack();
             sRequestQueue = new RequestQueue(diskBasedCache, new BasicNetworkOOM(httpStack));
             sRequestQueue.start();
