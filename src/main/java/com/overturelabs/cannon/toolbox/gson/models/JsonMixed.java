@@ -30,6 +30,10 @@ public abstract class JsonMixed {
         mStrObj = obj;
     }
 
+    public boolean isJsonObject() {
+        return mIsJsonObject;
+    }
+
     /**
      * Set whether it is a Json Object
      *

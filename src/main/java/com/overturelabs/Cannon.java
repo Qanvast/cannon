@@ -447,7 +447,7 @@ public class Cannon {
     public void addPendingRequests(Queue<Request> pendingRequests) {
         while (!pendingRequests.isEmpty()) {
             Request request = pendingRequests.poll();
-            pendingRequests.add(request);
+            mRequestQueue.add(request);
         }
     }
 

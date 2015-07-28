@@ -43,9 +43,6 @@ public class JsonMixedDeserializer<T extends JsonMixed>
                          Type typeOfT,
                          JsonDeserializationContext context)
             throws JsonParseException {
-
-        System.err.println(json.toString());
-
         try {
             Class<?> genericsType = Class.forName(getClassName(typeOfT));
             T obj = (T) genericsType.newInstance();
