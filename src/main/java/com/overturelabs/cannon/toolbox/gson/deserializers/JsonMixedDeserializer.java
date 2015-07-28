@@ -47,7 +47,8 @@ public class JsonMixedDeserializer<T extends JsonMixed>
             Class<?> genericsType = Class.forName(getClassName(typeOfT));
             T obj = (T) genericsType.newInstance();
 
-            if (json.isJsonObject()) {
+            if (json.isJsonObject() ||
+                    json.isJsonArray()) {
                 obj.setIsJsonObject(true);
                 obj.setString(json.toString());
                 obj.transform();
