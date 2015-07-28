@@ -207,12 +207,14 @@ public class GenericRequest<T> extends Request<T> {
          * Currently only supports OAUTH2.
          */
         if (Cannon.isAuthenticatorEnabled()) {
-            final CannonAuthenticator authenticator = CannonAuthenticator.getInstance();
-            final String authToken = authenticator.getAuthToken();
-            final CannonAuthenticator.AuthTokenType authTokenType = authenticator.getAuthTokenType();
+            CannonAuthenticator authenticator = CannonAuthenticator.getInstance();
+            String authToken = authenticator.getAuthToken();
 
             if (authToken != null &&
                     authToken.length() > 0) {
+                CannonAuthenticator.AuthTokenType authTokenType =
+                        authenticator.getAuthTokenType();
+
                 switch (authTokenType) {
                     case OAUTH2:
                         mHeaders.put("Authorization", "Bearer " + authToken);
