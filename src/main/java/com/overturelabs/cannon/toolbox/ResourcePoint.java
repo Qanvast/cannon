@@ -220,7 +220,7 @@ public abstract class ResourcePoint<T> {
      *                             <br/>
      *                             {@link ResourcePoint#getResourcePath(java.util.Map)} will replace the placeholders with
      *                             provided parameters.
-     * @return Returns the updated {@link com.overturelabs.cannon.toolbox.ResourcePoint}.
+     * @return Returns the updated {@link ResourcePoint}.
      */
     public ResourcePoint<T> setSkeletonResourcePath(String skeletonResourcePath) {
         mSkeletonResourcePath = skeletonResourcePath;

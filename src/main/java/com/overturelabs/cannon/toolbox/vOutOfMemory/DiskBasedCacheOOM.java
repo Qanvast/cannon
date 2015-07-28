@@ -1,4 +1,4 @@
-package com.overturelabs.cannon.toolbox;
+package com.overturelabs.cannon.toolbox.vOutOfMemory;
 
 import com.android.volley.toolbox.DiskBasedCache;
 

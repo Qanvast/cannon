@@ -16,6 +16,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            java {
+                srcDir 'com.overturelabs'
+                exclude '**/uncompilable/**'
+            }
+        }
+    }
 }
 
 dependencies {

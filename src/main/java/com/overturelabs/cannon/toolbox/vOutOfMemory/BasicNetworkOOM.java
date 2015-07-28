@@ -1,4 +1,4 @@
-package com.overturelabs.cannon.toolbox;
+package com.overturelabs.cannon.toolbox.vOutOfMemory;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -24,7 +24,7 @@ public class BasicNetworkOOM extends BasicNetwork {
         try {
             return super.performRequest(request);
         } catch (java.lang.OutOfMemoryError error) {
-            throw new com.overturelabs.cannon.toolbox.OutOfMemoryError();
+            throw new OutOfMemoryError();
         }
     }
 }
