@@ -4,14 +4,10 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.overturelabs.Cannon;
-import com.overturelabs.cannon.toolbox.gson.deserializers.DateDeserializer;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 
 /**
  * {@link ResponseParser} for {@link com.google.gson.Gson} objects.
