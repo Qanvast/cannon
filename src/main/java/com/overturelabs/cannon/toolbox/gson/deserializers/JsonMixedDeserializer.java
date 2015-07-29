@@ -1,5 +1,6 @@
 package com.overturelabs.cannon.toolbox.gson.deserializers;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -30,7 +31,8 @@ public class JsonMixedDeserializer<T extends JsonMixed>
     }
 
     /**
-     * Deserialize a mixed type of either string or object
+     * Deserialize a mixed type of either string/boolean/integer or jsonObject or jsonArray
+     * Doesn't handle nested arrays
      *
      * @param json json element
      * @param typeOfT mixed type class
@@ -43,27 +45,42 @@ public class JsonMixedDeserializer<T extends JsonMixed>
                          Type typeOfT,
                          JsonDeserializationContext context)
             throws JsonParseException {
+        if (json == null) return null;
+
         try {
             Class<?> genericsType = Class.forName(getClassName(typeOfT));
             T obj = (T) genericsType.newInstance();
 
-            if (json.isJsonObject() ||
-                    json.isJsonArray()) {
-                obj.setIsJsonObject(true);
+            if (json.isJsonArray()) {
                 obj.setString(json.toString());
+                obj.setIsJsonArray(true);
+
+                JsonArray jsonArray = json.getAsJsonArray();
+                if (jsonArray.size() == 0) return null;
+
+                obj.setIsJsonObject(jsonArray.get(0).isJsonObject());
                 obj.transform();
-                return obj;
+            } else if (json.isJsonObject()) {
+                obj.setString(json.toString());
+                obj.setIsJsonObject(true);
+                obj.transform();
             } else if (json.isJsonPrimitive()) {
                 obj.setIsJsonObject(false);
-
                 JsonPrimitive primitive = json.getAsJsonPrimitive();
+
                 if (primitive.isString()) {
                     obj.setString(json.getAsString());
-                    return obj;
+                } else if (primitive.isBoolean()) {
+                    obj.setBoolean(json.getAsBoolean());
+                } else if (primitive.isNumber()) {
+                    obj.setInteger(json.getAsInt());
+                } else {
+                    return null;
                 }
+            } else {
+                return null;
             }
-
-            return null;
+            return obj;
         } catch (Exception e) {
             String msg = e.getLocalizedMessage();
             throw new JsonParseException(msg == null ? e.toString() : msg);

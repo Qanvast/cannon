@@ -474,6 +474,37 @@ public class Cannon {
         }
     }
 
+    /**
+     * Adds cannon's default request headers
+     *
+     * @param headers user supplied request headers
+     */
+    public void addCannonDeafultHeaders(Map<String, String> headers) {
+        synchronized (SAFETY_SWITCH) {
+            // Set Authorization header
+            if (headers.get("Authorization") == null &&
+                    mCannonAuthenticator != null) {
+                String authToken = mCannonAuthenticator.getAuthToken();
+
+                if (authToken != null && !authToken.isEmpty()) {
+                    CannonAuthenticator.AuthTokenType authTokenType =
+                            mCannonAuthenticator.getAuthTokenType();
+
+                    switch (authTokenType) {
+                        case OAUTH2:
+                            headers.put("Authorization", "Bearer " + authToken);
+                            break;
+                    }
+                }
+            }
+
+            // Set User Agent header to a special user agent string.
+            if (headers.get("User-Agent") == null) {
+                headers.put("User-Agent", mUserAgent);
+            }
+        }
+    }
+
     public static class NotLoadedException extends Exception {
 
         public NotLoadedException() {

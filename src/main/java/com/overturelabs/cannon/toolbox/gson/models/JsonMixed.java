@@ -7,29 +7,74 @@ package com.overturelabs.cannon.toolbox.gson.models;
  * e.g. User ID(String) and User(Custom Class)
  */
 public abstract class JsonMixed {
-    protected String mStrObj;
-    protected Boolean mIsJsonObject;
+    // Primitive Types
+    protected String mString;
+    protected int mInteger;
+    protected boolean mBoolean;
+    // Json Types
+    protected Boolean mIsJsonObject, mIsJsonArray;
 
     public JsonMixed(){}
 
     /**
-     * Return the json string
+     * Return the json string or string value
      *
-     * @return json string
+     * @return json string or string value
      */
     public String getString() {
-        return mStrObj;
+        return mString;
     }
 
     /**
-     * Set the json string
+     * Set the json string or string value
      *
-     * @param obj json string
+     * @param obj json string or string value
      */
     public void setString(String obj) {
-        mStrObj = obj;
+        mString = obj;
     }
 
+    /**
+     * Return the integer value
+     *
+     * @return integer value
+     */
+    public int getInteger() {
+        return mInteger;
+    }
+
+    /**
+     * Set the integer value
+     *
+     * @param obj integer value
+     */
+    public void setInteger(int obj) {
+        mInteger = obj;
+    }
+
+    /**
+     * Return the boolean value
+     *
+     * @return boolean value
+     */
+    public boolean getBoolean() {
+        return mBoolean;
+    }
+
+    /**
+     * Set the boolean value
+     *
+     * @param obj boolean value
+     */
+    public void setBoolean(boolean obj) {
+        mBoolean = obj;
+    }
+
+    /**
+     * Get whether it is a Json Object
+     *
+     * @return whether it is a Json Object
+     */
     public boolean isJsonObject() {
         return mIsJsonObject;
     }
@@ -37,10 +82,28 @@ public abstract class JsonMixed {
     /**
      * Set whether it is a Json Object
      *
-     * @param isJsonObject true is jsonObject, false is primitiveType OR jsonArray
+     * @param isJsonObject true is jsonObject, false is primitiveObject
      */
     public void setIsJsonObject(Boolean isJsonObject) {
         mIsJsonObject = isJsonObject;
+    }
+
+    /**
+     * Get whether it is a Json Array
+     *
+     * @return whether it is a Json Array
+     */
+    public boolean isJsonArray() {
+        return mIsJsonArray;
+    }
+
+    /**
+     * Set whether it is a Json Array
+     *
+     * @param isJsonArray true is jsonArray
+     */
+    public void setIsJsonArray(Boolean isJsonArray) {
+        mIsJsonArray = isJsonArray;
     }
 
     /**
@@ -50,7 +113,7 @@ public abstract class JsonMixed {
 
     @Override
     public String toString() {
-        return "String: "+(mStrObj == null ? "null" : mStrObj)
+        return "String: "+(mString == null ? "null" : mString)
                 + "\nIsJsonObject: "+(mIsJsonObject == null ? "null" : mIsJsonObject.toString());
     }
 }

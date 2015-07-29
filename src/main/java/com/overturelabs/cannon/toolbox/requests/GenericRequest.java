@@ -79,27 +79,7 @@ public class GenericRequest<T> extends Request<T> {
         }
 
         try {
-            Cannon cannon = Cannon.getInstance();
-
-            // Set Authorization header
-            CannonAuthenticator authenticator = cannon.getCannonAuthenticator();
-            if (authenticator != null) {
-                String authToken = authenticator.getAuthToken();
-
-                if (authToken != null && !authToken.isEmpty()) {
-                    CannonAuthenticator.AuthTokenType authTokenType =
-                            authenticator.getAuthTokenType();
-
-                    switch (authTokenType) {
-                        case OAUTH2:
-                            mHeaders.put("Authorization", "Bearer " + authToken);
-                            break;
-                    }
-                }
-            }
-
-            // Set User Agent header to a special user agent string.
-            mHeaders.put("User-Agent", cannon.getUserAgent());
+            Cannon.getInstance().addCannonDeafultHeaders(mHeaders);
         } catch (Cannon.NotLoadedException e) {
             e.printStackTrace();
         }
