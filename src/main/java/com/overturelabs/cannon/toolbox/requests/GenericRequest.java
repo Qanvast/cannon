@@ -7,7 +7,6 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.overturelabs.Cannon;
-import com.overturelabs.cannon.toolbox.CannonAuthenticator;
 import com.overturelabs.cannon.toolbox.parsers.ResponseParser;
 
 import java.util.HashMap;
