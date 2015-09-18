@@ -15,12 +15,12 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HttpStack;
-import com.android.volley.toolbox.ImageLoader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.overturelabs.cannon.BitmapLruCache;
 import com.overturelabs.cannon.OkHttpStack;
 import com.overturelabs.cannon.toolbox.CannonAuthenticator;
+import com.overturelabs.cannon.toolbox.ImageLoaderCustomRetryPolicy;
 import com.overturelabs.cannon.toolbox.ResourcePoint;
 import com.overturelabs.cannon.toolbox.SwissArmyKnife;
 import com.overturelabs.cannon.toolbox.gson.deserializers.DateDeserializer;
@@ -47,14 +47,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Cannon {
     public static final String TAG = "Cannon";
 
-    private final String DEFAULT_PARAMS_ENCODING = "UTF-8";
-    private final int DEFAULT_DISK_CACHE_MEMORY_ALLOCATION_MB = 300; // 300 MiB
-    private final String DEFAULT_DISK_CACHE_NAME = "AmmunitionBox";
+    private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
+    private static final int DEFAULT_DISK_CACHE_MEMORY_ALLOCATION_MB = 300; // 300 MiB
+    private static final String DEFAULT_DISK_CACHE_NAME = "AmmunitionBox";
 
     private final static AtomicBoolean SAFETY_SWITCH = new AtomicBoolean(true); // If safety switch is set, you can't fire the cannon! Loading the cannon will disable the safety switch.
 
     private static Cannon sInstance;
-    private static ImageLoader sImageLoader;
+    private static ImageLoaderCustomRetryPolicy sImageLoader;
 
     private WeakReference<Context> mAppContext;
     private String mUserAgent = "Cannon/0.0.1 (Android)"; // Default user agent string
@@ -178,7 +178,7 @@ public class Cannon {
             }
             mRequestQueue.start();
 
-            sImageLoader = new ImageLoader(mRequestQueue, new BitmapLruCache());
+            sImageLoader = new ImageLoaderCustomRetryPolicy(mRequestQueue, new BitmapLruCache());
 
             mCannonAuthenticator = null;
 
@@ -375,7 +375,7 @@ public class Cannon {
      * @return Volley's Image Loader
      * @throws NotLoadedException Cannon has not been loaded
      */
-    public static ImageLoader getImageLoader() throws NotLoadedException {
+    public static ImageLoaderCustomRetryPolicy getImageLoader() throws NotLoadedException {
         /**
          * No need to lock on SAFETY_SWITCH here since we implicitly assumes
          * that Cannon is loaded before user can call this function.
