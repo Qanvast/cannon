@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Pair;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.overturelabs.cannon.toolbox.parsers.ResponseParser;
 import com.squareup.okhttp.MediaType;
@@ -25,6 +26,7 @@ import okio.Buffer;
  */
 public class MultipartRequest<T> extends GenericRequest<T> {
 
+    private final static int MULTIPART_TIMEOUT_MS = 1000 * 60;
     private RequestBody mRequestBody;
 
     /**
@@ -53,6 +55,10 @@ public class MultipartRequest<T> extends GenericRequest<T> {
         super(method, url, headers, null, responseParser, successListener, errorListener);
 
         build(params, files);
+
+        setRetryPolicy(new DefaultRetryPolicy(MULTIPART_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     private void build(@Nullable final Map<String, String> params,
