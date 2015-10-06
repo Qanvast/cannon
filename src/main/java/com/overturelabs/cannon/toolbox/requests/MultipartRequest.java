@@ -26,7 +26,7 @@ import okio.Buffer;
  */
 public class MultipartRequest<T> extends GenericRequest<T> {
 
-    private final static int MULTIPART_TIMEOUT_MS = 1000 * 60;
+    private final static int MULTIPART_TIMEOUT_MS = 1000 * 90;
     private RequestBody mRequestBody;
 
     /**

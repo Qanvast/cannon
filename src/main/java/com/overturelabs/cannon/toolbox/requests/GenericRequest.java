@@ -3,6 +3,7 @@ package com.overturelabs.cannon.toolbox.requests;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -19,6 +20,8 @@ import java.util.Map;
  * @author      Steve Tan
  */
 public class GenericRequest<T> extends Request<T> {
+
+    private final static int TIMEOUT_MS = 1000 * 60;
     private Map<String, String> mHeaders;
     private Map<String, String> mParams;
     private ResponseParser<T> mResponseParser;
@@ -48,6 +51,10 @@ public class GenericRequest<T> extends Request<T> {
         this.mParams = params;
         this.mResponseParser = responseParser;
         this.mListener = successListener;
+
+        setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }    
     
     @Override
