@@ -15,14 +15,14 @@ public class ImageLoaderCustomRetryPolicy
         extends ImageLoader {
     /** Socket timeout in milliseconds for image requests */
     // From 1 second to 30 seconds
-    private final static int IMAGE_TIMEOUT_MS = 1000 * 30;
+    private static final int IMAGE_TIMEOUT_MS = 30 * 1000;
 
     /** Default number of retries for image requests */
     // From 2 retries to 3 retries
-    private final static int IMAGE_MAX_RETRIES = 3;
+    private static final int IMAGE_MAX_RETRIES = 3;
 
     /** Default backoff multiplier for image requests */
-    private final static float IMAGE_BACKOFF_MULT = 2f;
+    private static final float IMAGE_BACKOFF_MULT = 2f;
 
     /**
      * Constructs a new ImageLoader.

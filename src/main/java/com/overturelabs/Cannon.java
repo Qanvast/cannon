@@ -60,6 +60,7 @@ public class Cannon {
     private String mUserAgent = "Cannon/0.0.1 (Android)"; // Default user agent string
     private RequestQueue mRequestQueue;
     private CannonAuthenticator mCannonAuthenticator;
+    private GsonBuilder mGsonBuilder; // To allow custom deserializers to be added in
     private Gson mGson;
 
     public static Cannon getInstance()
@@ -83,22 +84,12 @@ public class Cannon {
      * Load the cannon! You cannot fire any volleys if the cannon is not loaded, so load it up!
      *
      * @param context Current context. Cannon needs this to load the request queue.
-     */
-    public static void load(@NonNull Context context, Class<?>... jsonMixedClasses) {
-        load(context, null, true, jsonMixedClasses);
-    }
-
-    /**
-     * Load the cannon! You cannot fire any volleys if the cannon is not loaded, so load it up!
-     *
-     * @param context Current context. Cannon needs this to load the request queue.
      * @param diskCacheMemoryAllocMB Disk cache memory allocation in megabytes, null sets to default 300MB
      * @param outOfMemoryVersion Use Out Of Memory versions of BasicNetwork and DiskBasedCache, null sets to default false
      */
     public static void load(@NonNull Context context,
                             @Nullable Integer diskCacheMemoryAllocMB,
-                            @Nullable Boolean outOfMemoryVersion,
-                            Class<?>... jsonMixedClasses) {
+                            @Nullable Boolean outOfMemoryVersion) {
         /**
          * Let's lock on the safety switch first, so that only one thread can perform write operations
          * at any one time. Then we check if the safety switch is on; If the safety switch is on, we will
@@ -108,7 +99,7 @@ public class Cannon {
             if (SAFETY_SWITCH.get()) {
                 // Not loaded!
                 if (sInstance == null) {
-                    sInstance = new Cannon(context, diskCacheMemoryAllocMB, outOfMemoryVersion, jsonMixedClasses);
+                    sInstance = new Cannon(context, diskCacheMemoryAllocMB, outOfMemoryVersion);
                     SAFETY_SWITCH.set(false);
                 }
             }
@@ -117,8 +108,7 @@ public class Cannon {
 
     private Cannon(@NonNull Context context,
                    @Nullable Integer diskCacheMemoryAllocMB,
-                   @Nullable Boolean outOfMemoryVersion,
-                   @Nullable Class<?>... jsonMixedClasses) {
+                   @Nullable Boolean outOfMemoryVersion) {
         try {
             /**
              * We load the cannon as part of the application
@@ -180,16 +170,15 @@ public class Cannon {
 
             sImageLoader = new ImageLoaderCustomRetryPolicy(mRequestQueue, new BitmapLruCache());
 
-            mCannonAuthenticator = null;
-
             // Create gson
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-            if (jsonMixedClasses != null &&
-                    jsonMixedClasses.length > 0) {
-                registerJsonMixedTypeAdapters(gsonBuilder, jsonMixedClasses);
+            if (mGsonBuilder == null) {
+                mGsonBuilder = new GsonBuilder();
             }
-            mGson = gsonBuilder.create();
+            mGsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+            mGson = null;
+            mGson = mGsonBuilder.create();
+
+            mCannonAuthenticator = null;
         } catch (PackageManager.NameNotFoundException e) {
             // Crashlytics.logException(e);
         }
@@ -462,15 +451,38 @@ public class Cannon {
     }
 
     /**
-     * For Gson to register
-     * {@link com.overturelabs.cannon.toolbox.gson.models.JsonMixed} Type Adapters
+     * Get Gson Builder main purpose is to add custom deserializers which {@link #recreateGson()} must be called to be in effect.
      *
-     * @param jsonMixedClasses classes which have mixed types of string/jsonobject
+     * @return Gson Builder
      */
-    public void registerJsonMixedTypeAdapters(GsonBuilder gsonBuilder,
-                                              Class<?>... jsonMixedClasses) {
-        for (Class<?> jsonMixedClass : jsonMixedClasses) {
-            gsonBuilder.registerTypeAdapter(jsonMixedClass, new JsonMixedDeserializer<>());
+    public GsonBuilder getGsonBuilder() {
+        return mGsonBuilder;
+    }
+
+    /**
+     * Recreates the gson builder purpose is to be called after {@link #getGsonBuilder()}
+     */
+    public void recreateGson() {
+        if (mGsonBuilder != null) {
+            mGson = null;
+            mGson = mGsonBuilder.create();
+        }
+    }
+
+    /**
+     * Adds {@link com.overturelabs.cannon.toolbox.gson.models.JsonMixed} child classes to be used with {@link JsonMixedDeserializer}
+     *
+     * @param jsonMixedClasses {@link com.overturelabs.cannon.toolbox.gson.models.JsonMixed} child classes
+     */
+    public void addJsonMixedClassDeserializers(Class<?>... jsonMixedClasses) {
+        if (mGsonBuilder != null &&
+                jsonMixedClasses != null &&
+                jsonMixedClasses.length > 0) {
+            for (Class<?> jsonMixedClass : jsonMixedClasses) {
+                mGsonBuilder.registerTypeAdapter(jsonMixedClass, new JsonMixedDeserializer<>());
+            }
+            mGson = null;
+            mGson = mGsonBuilder.create();
         }
     }
 
