@@ -22,7 +22,7 @@ public class BitmapLruCache extends LruCache<String, Bitmap>
 
     @Override
     protected int sizeOf(String key, Bitmap value) {
-        return value.getRowBytes() * value.getHeight();
+        return value.getByteCount() / 1024;
     }
 
     @Override
