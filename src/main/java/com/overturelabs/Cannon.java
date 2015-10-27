@@ -377,6 +377,12 @@ public class Cannon {
         }
     }
 
+    public void clearCache() {
+        if (mRequestQueue != null && mRequestQueue.getCache() != null) {
+            mRequestQueue.getCache().clear();
+        }
+    }
+
     /**
      * Disables Cannon Authenticator Manager
      */

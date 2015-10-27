@@ -72,7 +72,7 @@ public class RefreshRequest<T> extends GenericRequest<T> {
                     authenticator.hasRefreshRequest()) {
                 // Refresh Token Expired
                 if (error.networkResponse != null &&
-                        error.networkResponse.statusCode != 0) {
+                        error.networkResponse.statusCode == 400) {
                     authenticator.invalidate();
                 }
                 // No/Limited Connectivity or Server Error
