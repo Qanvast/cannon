@@ -141,30 +141,29 @@ public class Cannon {
                 diskCacheMemoryAllocMB = DEFAULT_DISK_CACHE_MEMORY_ALLOCATION_MB;
             }
 
-            final File cacheDir;
-            int DISK_CACHE_MEMORY_ALLOCATION = diskCacheMemoryAllocMB * 1024 * 1024;
+            File cacheDir;
+            int DISK_CACHE_MEMORY_ALLOCATION;
             if (Environment.isExternalStorageEmulated()) {
                 cacheDir = new File(context.getExternalCacheDir(), DEFAULT_DISK_CACHE_NAME);
-                DISK_CACHE_MEMORY_ALLOCATION *= 2;
+                DISK_CACHE_MEMORY_ALLOCATION = diskCacheMemoryAllocMB * 1024 * 1024 * 2;
             } else {
                 cacheDir = new File(context.getCacheDir(), DEFAULT_DISK_CACHE_NAME);
+                DISK_CACHE_MEMORY_ALLOCATION = diskCacheMemoryAllocMB * 1024 * 1024;
             }
 
             // Create a DiskBasedCache of 300 MiB for internal storage,
             // 300MiB*2=600MiB for external storage
             HttpStack httpStack = new OkHttpStack();
             if (outOfMemoryVersion != null && outOfMemoryVersion) {
-                DiskBasedCacheOOM diskBasedCacheOOM =
-                        new DiskBasedCacheOOM(cacheDir, DISK_CACHE_MEMORY_ALLOCATION);
-
-                mRequestQueue = new RequestQueue(diskBasedCacheOOM,
-                        new BasicNetworkOOM(httpStack));
+                mRequestQueue = new RequestQueue(
+                        new DiskBasedCacheOOM(cacheDir, DISK_CACHE_MEMORY_ALLOCATION),
+                        new BasicNetworkOOM(httpStack)
+                );
             } else {
-                DiskBasedCache diskBasedCache =
-                        new DiskBasedCache(cacheDir, DISK_CACHE_MEMORY_ALLOCATION);
-
-                mRequestQueue = new RequestQueue(diskBasedCache,
-                        new BasicNetwork(httpStack));
+                mRequestQueue = new RequestQueue(
+                        new DiskBasedCache(cacheDir, DISK_CACHE_MEMORY_ALLOCATION),
+                        new BasicNetwork(httpStack)
+                );
             }
             mRequestQueue.start();
 
