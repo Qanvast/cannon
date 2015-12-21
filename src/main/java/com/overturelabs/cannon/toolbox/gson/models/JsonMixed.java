@@ -1,8 +1,6 @@
 package com.overturelabs.cannon.toolbox.gson.models;
 
 /**
- * Created by derricklee on 28/7/15.
- *
  * Abstract Class which caters to mixed type object currently only handles String and Custom Class
  * e.g. User ID(String) and User(Custom Class)
  */

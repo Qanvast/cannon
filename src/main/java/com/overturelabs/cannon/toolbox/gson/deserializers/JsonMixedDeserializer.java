@@ -10,9 +10,6 @@ import com.overturelabs.cannon.toolbox.gson.models.JsonMixed;
 
 import java.lang.reflect.Type;
 
-/**
- * Created by derricklee on 28/7/15.
- */
 public class JsonMixedDeserializer<T extends JsonMixed>
         implements JsonDeserializer<T> {
 

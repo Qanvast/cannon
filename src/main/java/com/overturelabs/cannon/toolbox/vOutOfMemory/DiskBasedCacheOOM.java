@@ -4,9 +4,6 @@ import com.android.volley.toolbox.DiskBasedCache;
 
 import java.io.File;
 
-/**
- * Created by derricklee on 4/1/15.
- */
 public class DiskBasedCacheOOM extends DiskBasedCache {
     public DiskBasedCacheOOM(File rootDirectory, int maxCacheSizeInBytes) {
         super(rootDirectory, maxCacheSizeInBytes);

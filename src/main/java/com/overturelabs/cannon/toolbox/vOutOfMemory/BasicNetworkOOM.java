@@ -7,9 +7,6 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.ByteArrayPool;
 import com.android.volley.toolbox.HttpStack;
 
-/**
- * Created by derricklee on 4/1/15.
- */
 public class BasicNetworkOOM extends BasicNetwork {
     public BasicNetworkOOM(HttpStack httpStack) {
         super(httpStack);

@@ -15,7 +15,6 @@ import java.util.Map;
  * Generic refresh request class
  *
  * @param <T>   Type of expected response object.
- * @author      Derrick Lee
  */
 public class RefreshRequest<T> extends GenericRequest<T> {
     public RefreshRequest(int method, String url,

@@ -8,9 +8,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 
-/**
- * Created by derricklee on 18/9/15.
- */
 public class ImageLoaderCustomRetryPolicy
         extends ImageLoader {
     /** Socket timeout in milliseconds for image requests */
