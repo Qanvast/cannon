@@ -85,7 +85,7 @@ public class GenericRequest<T> extends Request<T> {
         }
 
         try {
-            Cannon.getInstance().addCannonDeafultHeaders(mHeaders);
+            Cannon.getInstance().addCannonDefaultHeaders(mHeaders);
         } catch (Cannon.NotLoadedException e) {
             e.printStackTrace();
         }

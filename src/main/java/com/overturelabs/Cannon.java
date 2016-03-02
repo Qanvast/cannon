@@ -20,6 +20,7 @@ import com.google.gson.GsonBuilder;
 import com.overturelabs.cannon.BitmapLruCache;
 import com.overturelabs.cannon.OkHttpStack;
 import com.overturelabs.cannon.toolbox.CannonAuthenticator;
+import com.overturelabs.cannon.toolbox.CannonImageLoader;
 import com.overturelabs.cannon.toolbox.ImageLoaderCustomRetryPolicy;
 import com.overturelabs.cannon.toolbox.ResourcePoint;
 import com.overturelabs.cannon.toolbox.SwissArmyKnife;
@@ -55,6 +56,7 @@ public class Cannon {
 
     private static Cannon sInstance;
     private static ImageLoaderCustomRetryPolicy sImageLoader;
+    private static CannonImageLoader cannonImageLoader;
 
     private WeakReference<Context> mAppContext;
     private String mUserAgent = "Cannon/0.0.1 (Android)"; // Default user agent string
@@ -167,7 +169,7 @@ public class Cannon {
             }
             mRequestQueue.start();
 
-            sImageLoader = new ImageLoaderCustomRetryPolicy(mRequestQueue, new BitmapLruCache());
+            cannonImageLoader = new CannonImageLoader(mRequestQueue, new BitmapLruCache());
 
             // Create gson
             if (mGsonBuilder == null) {
@@ -363,7 +365,7 @@ public class Cannon {
      * @return Volley's Image Loader
      * @throws NotLoadedException Cannon has not been loaded
      */
-    public static ImageLoaderCustomRetryPolicy getImageLoader() throws NotLoadedException {
+    public static CannonImageLoader getImageLoader() throws NotLoadedException {
         /**
          * No need to lock on SAFETY_SWITCH here since we implicitly assumes
          * that Cannon is loaded before user can call this function.
@@ -372,7 +374,7 @@ public class Cannon {
             // Well it looks like the cannon was not loaded. I'll be damned.
             throw new NotLoadedException();
         } else {
-            return sImageLoader;
+            return cannonImageLoader;
         }
     }
 
@@ -496,7 +498,7 @@ public class Cannon {
      *
      * @param headers user supplied request headers
      */
-    public void addCannonDeafultHeaders(Map<String, String> headers) {
+    public void addCannonDefaultHeaders(Map<String, String> headers) {
         synchronized (SAFETY_SWITCH) {
             // Set Authorization header
             if (headers.get("Authorization") == null &&
