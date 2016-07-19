@@ -249,8 +249,10 @@ public class Cannon {
                               @NonNull Response.Listener<T> successListener,
                               @NonNull Response.ErrorListener errorListener)
             throws NotLoadedException, UnsupportedEncodingException {
-        String url = getUrl(resourcePoint, method, resourcePathParams, requestParams, encoding);
-        return fire(new GenericRequest<>(method, url, requestHeaders, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
+        final String url = getUrl(resourcePoint, method, resourcePathParams, requestParams, encoding);
+        final GenericRequest<T> request = new GenericRequest<>(method, url, requestHeaders, requestParams, resourcePoint.getResponseParser(), successListener, errorListener);
+        request.setTag(resourcePoint.getClass().getName());
+        return fire(request);
     }
 
     /**
@@ -284,8 +286,10 @@ public class Cannon {
                                             @NonNull Response.Listener<T> successListener,
                                             @NonNull Response.ErrorListener errorListener)
             throws NotLoadedException, UnsupportedEncodingException {
-        String url = getUrl(resourcePoint, method, resourcePathParams, requestParams, encoding);
-        return fire(new MultipartRequest<>(method, url, requestHeaders, requestParams, files, resourcePoint.getResponseParser(), successListener, errorListener));
+        final String url = getUrl(resourcePoint, method, resourcePathParams, requestParams, encoding);
+        final MultipartRequest<T> request = new MultipartRequest<>(method, url, requestHeaders, requestParams, files, resourcePoint.getResponseParser(), successListener, errorListener);
+        request.setTag(resourcePoint.getClass().getName());
+        return fire(request);
     }
 
     /**
@@ -314,8 +318,10 @@ public class Cannon {
                                           @NonNull Response.Listener<T> successListener,
                                           @NonNull Response.ErrorListener errorListener)
             throws NotLoadedException, UnsupportedEncodingException {
-        String url = getUrl(resourcePoint, method, resourcePathParams, requestParams, encoding);
-        return fire(new RefreshRequest<>(method, url, requestHeaders, requestParams, resourcePoint.getResponseParser(), successListener, errorListener));
+        final String url = getUrl(resourcePoint, method, resourcePathParams, requestParams, encoding);
+        final RefreshRequest<T> request = new RefreshRequest<>(method, url, requestHeaders, requestParams, resourcePoint.getResponseParser(), successListener, errorListener);
+        request.setTag(resourcePoint.getClass().getName());
+        return fire(request);
     }
 
     /**
