@@ -530,6 +530,24 @@ public class Cannon {
         }
     }
 
+    /**
+     * Cancel all requests that match the {@link com.android.volley.RequestQueue.RequestFilter}.
+     *
+     * @param filter
+     */
+    public void cancelAll(final RequestQueue.RequestFilter filter) {
+        mRequestQueue.cancelAll(filter);
+    }
+
+    /**
+     * Cancel all requests that match the tag.
+     *
+     * @param tag
+     */
+    public void cancelAll(final Object tag) {
+        mRequestQueue.cancelAll(tag);
+    }
+
     public static class NotLoadedException extends Exception {
 
         public NotLoadedException() {
