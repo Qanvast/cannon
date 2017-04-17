@@ -5,6 +5,7 @@ import com.overturelabs.Cannon;
 
 import java.util.ArrayDeque;
 import java.util.Date;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -16,7 +17,7 @@ public class CannonAuthenticator {
     }
 
     public enum AuthTokenType {
-        BSDAUTH, CDSA, GSSAPI, JAAS, NMAS, OAUTH, OAUTH2, OID, OIDC, PAM, SASL, SSPI, XUDA
+        OAUTH2, QANVAST_GUEST
     }
 
     private String mAuthToken;
@@ -173,6 +174,28 @@ public class CannonAuthenticator {
         if (mPendingRequestQueue != null) {
             cannon.addPendingRequests(mPendingRequestQueue);
             mPendingRequestQueue.clear();
+        }
+    }
+
+    /**
+     * Modify request headers depending on authentication method.
+     *
+     * @param headers
+     */
+    public void updateCannonHeaders(final Map<String, String> headers) {
+        if (getAuthToken() == null || getAuthToken().isEmpty()) {
+            return;
+        }
+
+        switch (getAuthTokenType()) {
+            case OAUTH2:
+                if (headers.get("Authorization") == null) {
+                    headers.put("Authorization", "Bearer " + getAuthToken());
+                }
+                return;
+            case QANVAST_GUEST:
+                headers.put("x-qanvast-client-secret", getAuthToken());
+                break;
         }
     }
 }

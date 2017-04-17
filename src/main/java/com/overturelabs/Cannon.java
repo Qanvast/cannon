@@ -507,20 +507,8 @@ public class Cannon {
     public void addCannonDefaultHeaders(Map<String, String> headers) {
         synchronized (SAFETY_SWITCH) {
             // Set Authorization header
-            if (headers.get("Authorization") == null &&
-                    mCannonAuthenticator != null) {
-                String authToken = mCannonAuthenticator.getAuthToken();
-
-                if (authToken != null && !authToken.isEmpty()) {
-                    CannonAuthenticator.AuthTokenType authTokenType =
-                            mCannonAuthenticator.getAuthTokenType();
-
-                    switch (authTokenType) {
-                        case OAUTH2:
-                            headers.put("Authorization", "Bearer " + authToken);
-                            break;
-                    }
-                }
+            if (mCannonAuthenticator != null) {
+                mCannonAuthenticator.updateCannonHeaders(headers);
             }
 
             // Set User Agent header to a special user agent string.
